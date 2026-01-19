@@ -279,7 +279,7 @@ class MatplotlibGUI:
             
         guru.info("GUI closed.")
 
-def run_app(video_path, checkpoint_dir, model_cfg, device=None, block=False, log_file=None):
+def run_app(video_path, checkpoint_dir, model_cfg, device=None, block=False, log_file=None, output_mask_dir=None):
     """
     Main function to run the app in a notebook with a video path.
     """
@@ -304,7 +304,8 @@ def run_app(video_path, checkpoint_dir, model_cfg, device=None, block=False, log
     frames_dir = os.path.join(base_dir, f"{video_name}_frames")
     
     # Masks directory
-    masks_dir = os.path.join(base_dir, f"{video_name}_masks")
+    if output_mask_dir is None:
+        output_mask_dir = os.path.join(base_dir, f"{video_name}_masks")
     
     # Extract frames
     guru.info(f"Preparing frames in {frames_dir}...")
@@ -315,7 +316,7 @@ def run_app(video_path, checkpoint_dir, model_cfg, device=None, block=False, log
         
     # Init App
     app = MatplotlibGUI(checkpoint_dir, model_cfg, device=device)
-    app.load_sequence(frames_dir, output_mask_dir=masks_dir)
+    app.load_sequence(frames_dir, output_mask_dir=output_mask_dir)
     
     if block:
         app.block_until_closed()
