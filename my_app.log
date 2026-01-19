@@ -1,0 +1,123 @@
+2026-01-20 00:04:32.572 | INFO     | main:run_app:310 - Preparing frames in /Users/taldugma/Downloads/test_frames...
+2026-01-20 00:04:32.572 | INFO     | utils:extract_video_frames:94 - Frames already exist in /Users/taldugma/Downloads/test_frames. Skipping extraction. Clear directory to re-extract.
+2026-01-20 00:04:32.763 | INFO     | core:init_sam_model:76 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 00:04:32.792 | INFO     | main:load_sequence:116 - Loaded 5 images from /Users/taldugma/Downloads/test_frames
+2026-01-20 00:04:42.133 | INFO     | core:get_sam_features:176 - SAM features extracted.
+2026-01-20 00:04:42.134 | INFO     | main:block_until_closed:254 - Launching GUI... (Cell active)
+2026-01-20 00:04:52.764 | INFO     | main:block_until_closed:267 - Execution stopped by user.
+2026-01-20 00:04:52.765 | INFO     | main:block_until_closed:280 - GUI closed.
+2026-01-20 00:05:07.809 | INFO     | main:run_app:310 - Preparing frames in /Users/taldugma/Downloads/test_frames...
+2026-01-20 00:05:07.809 | INFO     | utils:extract_video_frames:94 - Frames already exist in /Users/taldugma/Downloads/test_frames. Skipping extraction. Clear directory to re-extract.
+2026-01-20 00:05:08.010 | INFO     | core:init_sam_model:76 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 00:05:08.039 | INFO     | main:load_sequence:116 - Loaded 5 images from /Users/taldugma/Downloads/test_frames
+2026-01-20 00:05:17.364 | INFO     | core:get_sam_features:176 - SAM features extracted.
+2026-01-20 00:05:33.214 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:05:33.219 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:05:34.519 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:05:34.523 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:05:41.134 | INFO     | main:on_click:177 - Added point at 328, 277 frame 0
+2026-01-20 00:06:06.711 | INFO     | main:on_submit:231 - Running tracker... this might take a moment.
+2026-01-20 00:06:06.711 | INFO     | core:run_tracker:248 - Loading images for visualization...
+2026-01-20 00:06:06.726 | INFO     | core:run_tracker:259 - Propagating masks in video...
+2026-01-20 00:06:06.726 | INFO     | core:run_tracker:261 - started propagation
+2026-01-20 00:06:09.693 | INFO     | core:run_tracker:263 - propagated frame 0
+2026-01-20 00:06:29.968 | INFO     | core:run_tracker:263 - propagated frame 1
+2026-01-20 00:06:53.840 | INFO     | core:run_tracker:263 - propagated frame 2
+2026-01-20 00:07:20.767 | INFO     | core:run_tracker:263 - propagated frame 3
+2026-01-20 00:07:51.323 | INFO     | core:run_tracker:263 - propagated frame 4
+2026-01-20 00:07:51.324 | INFO     | core:run_tracker:297 - Processing results...
+2026-01-20 00:07:51.325 | INFO     | utils:colorize_masks:33 - max_idx=np.uint8(1)
+2026-01-20 00:07:51.354 | INFO     | main:on_submit:233 - Tracking complete. Results loaded into view.
+2026-01-20 00:07:51.521 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:07:51.524 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:10.654 | INFO     | core:set_input_image:137 - Setting frame 2 / 5
+2026-01-20 00:08:10.659 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:12.492 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:08:12.499 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:14.069 | INFO     | core:set_input_image:137 - Setting frame 2 / 5
+2026-01-20 00:08:14.074 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:15.385 | INFO     | core:set_input_image:137 - Setting frame 3 / 5
+2026-01-20 00:08:15.392 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:17.237 | INFO     | core:set_input_image:137 - Setting frame 4 / 5
+2026-01-20 00:08:17.244 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:18.834 | INFO     | core:set_input_image:137 - Setting frame 3 / 5
+2026-01-20 00:08:18.837 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:19.845 | INFO     | core:set_input_image:137 - Setting frame 2 / 5
+2026-01-20 00:08:19.850 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:21.943 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:08:21.947 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:25.209 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:08:25.213 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:08:27.041 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:08:27.045 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:28.644 | INFO     | core:set_input_image:137 - Setting frame 2 / 5
+2026-01-20 00:08:28.648 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:29.484 | INFO     | core:set_input_image:137 - Setting frame 3 / 5
+2026-01-20 00:08:29.494 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:30.587 | INFO     | core:set_input_image:137 - Setting frame 4 / 5
+2026-01-20 00:08:30.591 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:34.472 | INFO     | main:on_clear_points:218 - Cleared points for current mask.
+2026-01-20 00:08:35.963 | INFO     | core:set_input_image:137 - Setting frame 3 / 5
+2026-01-20 00:08:35.967 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:37.781 | INFO     | core:set_input_image:137 - Setting frame 2 / 5
+2026-01-20 00:08:37.787 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:39.336 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:08:39.341 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:08:40.589 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:08:40.593 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:09:01.356 | INFO     | main:on_click:177 - Added point at 446, 99 frame 0
+2026-01-20 00:09:02.113 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:09:02.116 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:09:21.042 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:09:33.269 | INFO     | main:on_click:177 - Added point at 325, 279 frame 1
+2026-01-20 00:09:43.553 | INFO     | main:on_click:177 - Added point at 282, 254 frame 1
+2026-01-20 00:09:47.098 | INFO     | main:on_click:177 - Added point at 308, 258 frame 1
+2026-01-20 00:09:48.322 | INFO     | main:on_click:177 - Added point at 311, 279 frame 1
+2026-01-20 00:09:52.576 | INFO     | core:set_input_image:137 - Setting frame 2 / 5
+2026-01-20 00:09:52.583 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:09:54.441 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:09:54.448 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:09:57.390 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 2 points.
+2026-01-20 00:09:58.206 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:10:07.580 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:10:07.587 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 4 points.
+2026-01-20 00:10:14.511 | INFO     | main:on_submit:231 - Running tracker... this might take a moment.
+2026-01-20 00:10:14.511 | INFO     | core:run_tracker:248 - Loading images for visualization...
+2026-01-20 00:10:14.533 | INFO     | core:run_tracker:259 - Propagating masks in video...
+2026-01-20 00:10:14.534 | INFO     | core:run_tracker:261 - started propagation
+2026-01-20 00:10:57.159 | INFO     | core:run_tracker:263 - propagated frame 0
+2026-01-20 00:11:16.572 | INFO     | core:run_tracker:263 - propagated frame 1
+2026-01-20 00:11:54.562 | INFO     | core:run_tracker:263 - propagated frame 2
+2026-01-20 00:12:38.766 | INFO     | core:run_tracker:263 - propagated frame 3
+2026-01-20 00:13:30.234 | INFO     | core:run_tracker:263 - propagated frame 4
+2026-01-20 00:13:30.235 | INFO     | core:run_tracker:297 - Processing results...
+2026-01-20 00:13:30.238 | INFO     | utils:colorize_masks:33 - max_idx=np.uint8(2)
+2026-01-20 00:13:30.272 | INFO     | main:on_submit:233 - Tracking complete. Results loaded into view.
+2026-01-20 00:13:30.647 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:13:30.650 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:15:04.474 | INFO     | core:set_input_image:137 - Setting frame 2 / 5
+2026-01-20 00:15:04.480 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:15:06.008 | INFO     | core:set_input_image:137 - Setting frame 3 / 5
+2026-01-20 00:15:06.015 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:15:09.376 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:15:09.381 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:15:16.524 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 2 points.
+2026-01-20 00:15:18.055 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:15:18.886 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 2 points.
+2026-01-20 00:15:19.374 | INFO     | core:set_mask_id:102 - Switched to Mask ID -1. Loaded 0 points.
+2026-01-20 00:15:22.579 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:15:22.585 | INFO     | core:set_mask_id:102 - Switched to Mask ID -1. Loaded 0 points.
+2026-01-20 00:15:23.464 | INFO     | core:set_input_image:137 - Setting frame 2 / 5
+2026-01-20 00:15:23.471 | INFO     | core:set_mask_id:102 - Switched to Mask ID -1. Loaded 0 points.
+2026-01-20 00:15:25.336 | INFO     | core:set_input_image:137 - Setting frame 3 / 5
+2026-01-20 00:15:25.341 | INFO     | core:set_mask_id:102 - Switched to Mask ID -1. Loaded 0 points.
+2026-01-20 00:15:26.048 | INFO     | core:set_input_image:137 - Setting frame 4 / 5
+2026-01-20 00:15:26.055 | INFO     | core:set_mask_id:102 - Switched to Mask ID -1. Loaded 0 points.
+2026-01-20 00:15:28.439 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:15:28.839 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:15:31.356 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:15:31.873 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:15:45.604 | INFO     | core:save_masks_to_dir:326 - Saved masks to /Users/taldugma/Downloads/test_masks!
+2026-01-20 00:15:45.604 | INFO     | main:on_save:244 - Masks saved to /Users/taldugma/Downloads/test_masks
+2026-01-20 00:15:50.386 | INFO     | core:save_masks_to_dir:326 - Saved masks to /Users/taldugma/Downloads/test_masks!
+2026-01-20 00:15:50.387 | INFO     | main:on_save:244 - Masks saved to /Users/taldugma/Downloads/test_masks

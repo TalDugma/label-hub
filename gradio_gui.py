@@ -103,7 +103,7 @@ class PromptGUI(object):
         return len(self.img_paths)
 
     def set_input_image(self, i: int = 0) -> np.ndarray | None:
-        guru.debug(f"Setting frame {i} / {len(self.img_paths)}")
+        guru.info(f"Setting frame {i} / {len(self.img_paths)}")
         if i < 0 or i >= len(self.img_paths):
             return self.image
         self.clear_points()
@@ -215,7 +215,7 @@ class PromptGUI(object):
             np.save(np_out_path, id_mask)
         
         message = f"Saved masks to {output_dir}!"
-        guru.debug(message)
+        guru.info(message)
         return message
 
 
@@ -252,7 +252,7 @@ def get_hls_palette(
 
 def colorize_masks(images, index_masks, fac: float = 0.5):
     max_idx = max([m.max() for m in index_masks])
-    guru.debug(f"{max_idx=}")
+    guru.info(f"{max_idx=}")
     palette = get_hls_palette(max_idx + 1)
     color_masks = []
     out_frames = []
@@ -355,13 +355,13 @@ def make_demo(
         def update_vid_root(root_dir, vid_name):
             vid_root = f"{root_dir}/{vid_name}"
             vid_paths = listdir(vid_root)
-            guru.debug(f"Updating video paths: {vid_paths=}")
+            guru.info(f"Updating video paths: {vid_paths=}")
             return vid_paths
 
         def update_img_root(root_dir, img_name):
             img_root = f"{root_dir}/{img_name}"
             img_dirs = listdir(img_root)
-            guru.debug(f"Updating img dirs: {img_dirs=}")
+            guru.info(f"Updating img dirs: {img_dirs=}")
             return img_root, img_dirs
 
         def update_mask_dir(root_dir, mask_name, seq_name):
@@ -376,7 +376,7 @@ def make_demo(
 
         def select_video(root_dir, vid_name, seq_file):
             seq_name = os.path.splitext(seq_file)[0]
-            guru.debug(f"Selected video: {seq_file=}")
+            guru.info(f"Selected video: {seq_file=}")
             vid_path = f"{root_dir}/{vid_name}/{seq_file}"
             return seq_name, vid_path
 
@@ -386,7 +386,7 @@ def make_demo(
             seq_name = os.path.splitext(vid_file)[0]
             vid_path = f"{root_dir}/{vid_name}/{vid_file}"
             out_dir = f"{root_dir}/{img_name}/{seq_name}"
-            guru.debug(f"Extracting frames to {out_dir}")
+            guru.info(f"Extracting frames to {out_dir}")
             os.makedirs(out_dir, exist_ok=True)
 
             def make_time(seconds):
@@ -408,7 +408,7 @@ def make_demo(
 
         def select_image_dir(root_dir, img_name, seq_name):
             img_dir = f"{root_dir}/{img_name}/{seq_name}"
-            guru.debug(f"Selected image dir: {img_dir}")
+            guru.info(f"Selected image dir: {img_dir}")
             return seq_name, img_dir
 
         def update_image_dir(root_dir, img_name, seq_name):
@@ -424,7 +424,7 @@ def make_demo(
             i = evt.index[1]  # type: ignore
             j = evt.index[0]  # type: ignore
             index_mask = prompts.add_point(frame_idx, i, j)
-            guru.debug(f"{index_mask.shape=}")
+            guru.info(f"{index_mask.shape=}")
             palette = get_hls_palette(index_mask.max() + 1)
             color_mask = palette[index_mask]
             out_u = compose_img_mask(img, color_mask)

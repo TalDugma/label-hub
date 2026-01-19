@@ -30,7 +30,7 @@ def colorize_masks(images, index_masks, fac: float = 0.5):
     if not index_masks:
         return [], []
     max_idx = max([m.max() for m in index_masks])
-    guru.debug(f"{max_idx=}")
+    guru.info(f"{max_idx=}")
     palette = get_hls_palette(max_idx + 1)
     color_masks = []
     out_frames = []
@@ -61,7 +61,7 @@ def extract_frames(root_dir, vid_name, img_name, vid_file, start, end, fps, heig
     seq_name = os.path.splitext(vid_file)[0]
     vid_path = f"{root_dir}/{vid_name}/{vid_file}"
     out_dir = f"{root_dir}/{img_name}/{seq_name}"
-    guru.debug(f"Extracting frames to {out_dir}")
+    guru.info(f"Extracting frames to {out_dir}")
     os.makedirs(out_dir, exist_ok=True)
 
     def make_time(seconds):

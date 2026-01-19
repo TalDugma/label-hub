@@ -28,6 +28,10 @@ class MatplotlibGUI:
         self.btn_submit = None
         self.btn_save = None
         self.btn_reset = None
+        self.btn_prev_id = None
+        self.btn_next_id = None
+        
+        self.current_overlay_mask = None
         
         self.setup_gui()
         
@@ -59,9 +63,16 @@ class MatplotlibGUI:
         self.radio_label.on_clicked(self.on_label_type_change)
         
         # Add Mask
-        ax_add = self.fig.add_axes([start_x, start_y - 2*gap, btn_width, btn_height])
-        self.btn_add_mask = Button(ax_add, 'Add New Mask')
-        self.btn_add_mask.on_clicked(self.on_add_mask)
+        # Mask ID Controls
+        # Previous ID
+        ax_prev = self.fig.add_axes([start_x, start_y - 2*gap, btn_width / 2 - 0.01, btn_height])
+        self.btn_prev_id = Button(ax_prev, '< Prev ID')
+        self.btn_prev_id.on_clicked(self.on_prev_id)
+        
+        # Next ID
+        ax_next = self.fig.add_axes([start_x + btn_width / 2 + 0.01, start_y - 2*gap, btn_width / 2 - 0.01, btn_height])
+        self.btn_next_id = Button(ax_next, 'Next ID >')
+        self.btn_next_id.on_clicked(self.on_next_id)
         
         # Clear Points
         ax_clear = self.fig.add_axes([start_x, start_y - 3*gap, btn_width, btn_height])
@@ -134,8 +145,14 @@ class MatplotlibGUI:
              display_img = draw_points(display_img, self.prompts.selected_points, self.prompts.selected_labels)
              
         self.ax.clear()
+        self.ax.clear()
         self.ax.imshow(display_img)
-        self.ax.set_title(f"Frame: {self.prompts.frame_index} | Mask ID: {self.prompts.cur_mask_idx}")
+        if self.prompts.cur_mask_idx == -1:
+             title_str = f"Frame: {self.prompts.frame_index} | View: All Masks"
+        else:
+             title_str = f"Frame: {self.prompts.frame_index} | Current Mask ID: {self.prompts.cur_mask_idx}"
+             
+        self.ax.set_title(title_str)
         self.ax.axis('off')
         self.fig.canvas.draw_idle()
 
@@ -149,10 +166,15 @@ class MatplotlibGUI:
         x, y = event.xdata, event.ydata
         if x is None or y is None:
             return
+
+        if self.prompts.cur_mask_idx == -1:
+            guru.warning("Cannot add points in 'All Masks' view. Switch to a specific ID to edit.")
+            return
             
         # Add point
         # y is row, x is col
         mask = self.prompts.add_point(self.prompts.frame_index, int(y), int(x)) 
+        guru.info(f"Added point at {int(x)}, {int(y)} frame {self.prompts.frame_index}")
         self.current_overlay_mask = mask
         self.update_display()
 
@@ -160,28 +182,46 @@ class MatplotlibGUI:
         idx = int(val)
         if idx != self.prompts.frame_index:
             self.prompts.set_input_image(idx)
-            # Clear current overlay mask when changing frames
-            self.current_overlay_mask = None 
+            # Restore overlay mask if available (loaded by set_input_image's side effects or getter)
+            self.current_overlay_mask = self.prompts.get_current_mask()
             self.update_display()
+
+    def on_prev_id(self, event):
+        # Allow going to -1 (All View)
+        new_id = self.prompts.cur_mask_idx - 1
+        if new_id < -1: 
+             new_id = -1
+             
+        if new_id != self.prompts.cur_mask_idx:
+            self.prompts.set_mask_id(new_id)
+            self.current_overlay_mask = self.prompts.get_current_mask()
+            self.update_display()
+
+    def on_next_id(self, event):
+        new_id = self.prompts.cur_mask_idx + 1
+        self.prompts.set_mask_id(new_id)
+        self.current_overlay_mask = self.prompts.get_current_mask()
+        self.update_display()
 
     def on_label_type_change(self, label):
         if label == 'Positive':
             self.prompts.set_positive()
+            guru.info("Switched to Positive Labels")
         else:
             self.prompts.set_negative()
+            guru.info("Switched to Negative Labels")
 
-    def on_add_mask(self, event):
-        self.prompts.add_new_mask()
-        self.current_overlay_mask = None
-        self.update_display()
+
 
     def on_clear_points(self, event):
         self.prompts.clear_points()
+        guru.info("Cleared points for current mask.")
         self.current_overlay_mask = None
         self.update_display()
 
     def on_reset(self, event):
         self.prompts.reset()
+        guru.info("Reset all states.")
         self.current_overlay_mask = None
         # Reload current image
         self.prompts.set_input_image(self.prompts.frame_index)
@@ -190,8 +230,11 @@ class MatplotlibGUI:
     def on_submit(self, event):
         guru.info("Running tracker... this might take a moment.")
         out_frames, color_masks = self.prompts.run_tracker()
-        guru.info("Tracking complete.")
-        # TODO: Implement result viewing logic if needed
+        guru.info("Tracking complete. Results loaded into view.")
+        
+        # Refresh current view
+        self.current_overlay_mask = self.prompts.get_current_mask()
+        self.update_display()
         
     def on_save(self, event):
         if not self.output_mask_dir:
@@ -200,16 +243,56 @@ class MatplotlibGUI:
         self.prompts.save_masks_to_dir(self.output_mask_dir)
         guru.info(f"Masks saved to {self.output_mask_dir}")
 
+    def block_until_closed(self):
+        """
+        Blocks the execution until the figure is closed.
+        Uses explicit draw and start_event_loop to ensure visibility and responsiveness.
+        """
+        if not self.fig:
+             return
+             
+        guru.info("Launching GUI... (Cell active)")
+        plt.show(block=False)
+        
+        # Force an initial draw and flush to ensure window is not blank
+        self.fig.canvas.draw()
+        self.fig.canvas.flush_events()
+        
+        try:
+            while plt.fignum_exists(self.fig.number):
+                # Run the backend's event loop for a short slice
+                # This should handle painting and inputs correctly without re-showing (infinite windows)
+                self.fig.canvas.start_event_loop(0.1)
+        except KeyboardInterrupt:
+            guru.info("Execution stopped by user.")
+            plt.close(self.fig)
+        except Exception as e:
+            # Fallback for backends that might not support start_event_loop well
+            guru.warning(f"Warning: {e}. Falling back to sleep loop.")
+            import time
+            while plt.fignum_exists(self.fig.number):
+                try:
+                    self.fig.canvas.flush_events()
+                except:
+                    pass
+                time.sleep(0.1)
+            
+        guru.info("GUI closed.")
 
-def run_app(video_path, checkpoint_dir, model_cfg, device=None):
+def run_app(video_path, checkpoint_dir, model_cfg, device=None, block=False, log_file=None):
     """
     Main function to run the app in a notebook with a video path.
     """
     from utils import extract_video_frames
     import os
     
+    # Configure logging if requested
+    if log_file:
+        guru.remove()
+        guru.add(log_file, level="INFO", enqueue=True) # enqueue=True for thread safety/async
+    
     if not os.path.exists(video_path):
-        print(f"Error: Video path {video_path} does not exist.")
+        guru.error(f"Error: Video path {video_path} does not exist.")
         return None
 
     # Derive directory names
@@ -224,14 +307,17 @@ def run_app(video_path, checkpoint_dir, model_cfg, device=None):
     masks_dir = os.path.join(base_dir, f"{video_name}_masks")
     
     # Extract frames
-    print(f"Preparing frames in {frames_dir}...")
+    guru.info(f"Preparing frames in {frames_dir}...")
     success = extract_video_frames(video_path, frames_dir)
     if not success:
-        print("Failed to extract frames.")
+        guru.error("Failed to extract frames.")
         return None
         
     # Init App
     app = MatplotlibGUI(checkpoint_dir, model_cfg, device=device)
     app.load_sequence(frames_dir, output_mask_dir=masks_dir)
+    
+    if block:
+        app.block_until_closed()
     
     return app

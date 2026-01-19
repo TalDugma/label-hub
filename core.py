@@ -1,7 +1,9 @@
 import os
 import torch
 import numpy as np
+import numpy as np
 import imageio.v2 as iio
+from tqdm import tqdm
 from loguru import logger as guru
 from sam2.build_sam import build_sam2_video_predictor
 from utils import isimage#, make_index_mask  # We need to implement make_index_mask in utils or keep it here.
@@ -10,12 +12,15 @@ from utils import isimage#, make_index_mask  # We need to implement make_index_m
 # Let's put it as a static method or helper here since it deals with mask logic.
 
 def make_index_mask(masks):
-    assert len(masks) > 0
-    idcs = list(masks.keys())
-    idx_mask = masks[idcs[0]].astype("uint8")
-    for i in idcs:
-        mask = masks[i]
-        idx_mask[mask] = i + 1
+    if not masks:
+        return None
+    
+    # Get shape from first mask
+    first_mask = next(iter(masks.values()))
+    idx_mask = np.zeros(first_mask.shape, dtype=np.uint8)
+    
+    for i, mask in masks.items():
+        idx_mask[mask > 0] = i + 1
     return idx_mask
 
 class PromptGUI(object):
@@ -48,6 +53,11 @@ class PromptGUI(object):
         self.cur_logits = {}
         self.index_masks_all = []
         self.color_masks_all = []
+        
+        # Persistence storage
+        self.per_frame_points = {}
+        self.per_frame_labels = {}
+        self.per_frame_masks = {}
 
         self.img_dir = ""
         self.img_paths = []
@@ -68,11 +78,32 @@ class PromptGUI(object):
     def clear_points(self):
         self.selected_points.clear()
         self.selected_labels.clear()
+        
+        # Clear specific mask from persistence
+        if self.frame_index in self.per_frame_points:
+            if self.cur_mask_idx in self.per_frame_points[self.frame_index]:
+                del self.per_frame_points[self.frame_index][self.cur_mask_idx]
+            if self.cur_mask_idx in self.per_frame_labels[self.frame_index]:
+                del self.per_frame_labels[self.frame_index][self.cur_mask_idx]
+            if self.cur_mask_idx in self.per_frame_masks[self.frame_index]:
+                del self.per_frame_masks[self.frame_index][self.cur_mask_idx]
+
+    def set_mask_id(self, mask_id):
+        self.cur_mask_idx = mask_id
+        
+        # Restore or Clear
+        if self.frame_index in self.per_frame_points and mask_id in self.per_frame_points[self.frame_index]:
+             self.selected_points = list(self.per_frame_points[self.frame_index][mask_id])
+             self.selected_labels = list(self.per_frame_labels[self.frame_index][mask_id])
+        else:
+             self.selected_points = []
+             self.selected_labels = []
+        
+        guru.info(f"Switched to Mask ID {mask_id}. Loaded {len(self.selected_points)} points.")
 
     def add_new_mask(self):
-        self.cur_mask_idx += 1
-        self.clear_points()
-        guru.info(f"Creating new mask with index {self.cur_mask_idx}")
+        # We might deprecate this simple incr in favor of explicit ID set
+        self.set_mask_id(self.cur_mask_idx + 1)
 
     def _clear_image(self):
         """
@@ -85,6 +116,9 @@ class PromptGUI(object):
         self.cur_logits = {}
         self.index_masks_all = []
         self.color_masks_all = []
+        self.per_frame_points = {}
+        self.per_frame_labels = {}
+        self.per_frame_masks = {}
 
     def reset(self):
         self._clear_image()
@@ -100,14 +134,41 @@ class PromptGUI(object):
         return len(self.img_paths)
 
     def set_input_image(self, i: int = 0) -> np.ndarray | None:
-        guru.debug(f"Setting frame {i} / {len(self.img_paths)}")
+        guru.info(f"Setting frame {i} / {len(self.img_paths)}")
         if i < 0 or i >= len(self.img_paths):
             return self.image
-        self.clear_points()
         self.frame_index = i
         image = iio.imread(self.img_paths[i])
         self.image = image
+        
+        # Restore state if exists
+        self.set_mask_id(self.cur_mask_idx)
+            
         return image
+
+    def get_current_masks(self):
+        """
+        Returns all mask dict for the current frame if it exists in persistence.
+        """
+        if self.frame_index in self.per_frame_masks:
+            return self.per_frame_masks[self.frame_index]
+        return {}
+
+    def get_current_mask(self):
+        """
+        Returns the specific mask for the current ID.
+        If current ID is -1, returns composite of all masks.
+        """
+        if self.cur_mask_idx == -1:
+             # Composite view
+             all_frame_masks = self.get_current_masks()
+             if not all_frame_masks:
+                 return None
+             return make_index_mask(all_frame_masks)
+
+        if self.frame_index in self.per_frame_masks and self.cur_mask_idx in self.per_frame_masks[self.frame_index]:
+             return self.per_frame_masks[self.frame_index][self.cur_mask_idx]
+        return None
 
     def get_sam_features(self):
         self.inference_state = self.sam_model.init_state(video_path=self.img_dir)
@@ -136,7 +197,26 @@ class PromptGUI(object):
         if not masks:
             return None
             
-        mask = make_index_mask(masks)
+        # FILTERING: Only keep the mask for the current ID
+        # The model might return predictions for other propagated objects, but we only want to see/edit current.
+        filtered_masks = {k: v for k, v in masks.items() if k == self.cur_mask_idx}
+        
+        if not filtered_masks:
+             guru.warning(f"No mask found for ID {self.cur_mask_idx} in SAM output.")
+             return None
+             
+        mask = make_index_mask(filtered_masks)
+        
+        # Save state nested
+        if frame_idx not in self.per_frame_points:
+            self.per_frame_points[frame_idx] = {}
+            self.per_frame_labels[frame_idx] = {}
+            self.per_frame_masks[frame_idx] = {}
+            
+        self.per_frame_points[frame_idx][self.cur_mask_idx] = list(self.selected_points)
+        self.per_frame_labels[frame_idx][self.cur_mask_idx] = list(self.selected_labels)
+        self.per_frame_masks[frame_idx][self.cur_mask_idx] = mask
+        
         return mask
     
     def get_sam_mask(self, frame_idx, input_points, input_labels):
@@ -165,6 +245,7 @@ class PromptGUI(object):
 
     def run_tracker(self):
         # read images and drop the alpha channel
+        guru.info("Loading images for visualization...")
         images = [iio.imread(p)[:, :, :3] for p in self.img_paths]
         
         video_segments = {}  # video_segments contains the per-frame segmentation results
@@ -175,16 +256,45 @@ class PromptGUI(object):
         else:
             ctx = torch.no_grad()
 
+        guru.info("Propagating masks in video...")
         with ctx:
-            for out_frame_idx, out_obj_ids, out_mask_logits in self.sam_model.propagate_in_video(self.inference_state, start_frame_idx=0, ):
+            guru.info("started propagation")
+            for out_frame_idx, out_obj_ids, out_mask_logits in self.sam_model.propagate_in_video(self.inference_state, start_frame_idx=0):
+                guru.info(f"propagated frame {out_frame_idx}")
                 masks = {
                     out_obj_id: (out_mask_logits[i] > 0.0).squeeze().cpu().numpy()
                     for i, out_obj_id in enumerate(out_obj_ids)
                 }
                 video_segments[out_frame_idx] = masks
 
+                # Update per_frame_masks for visualization
+                if out_frame_idx not in self.per_frame_masks:
+                    self.per_frame_masks[out_frame_idx] = {}
+                
+                # 'masks' is {obj_id: logical_mask}
+                # We need to convert logical_mask to standard mask format used in this app (usually uint8 with values)
+                # But actually, per_frame_masks[frame][id] expects a mask where that specific object is labeled. 
+                # make_index_mask converts {id: mask} -> single index mask.
+                # Here we want to store the mask for *each* object ID individually for our isolation logic.
+                
+                for obj_id, logical_mask in masks.items():
+                    # Create a mask where this object is labeled with its ID (or just 1? isolation logic uses initialized zeros and sets obj_id)
+                    # isolation logic in make_index_mask expects a dict of masks.
+                    # let's look at how add_point saves it: it saves the result of make_index_mask(filtered).
+                    # So we should save an index mask where pixels == obj_id (or 1 if we normalize).
+                    # Our make_index_mask sets pixels to `i+1` where `i` is the key. 
+                    # But the key coming from SAM is the arbitrary obj_id.
+                    # If we follow add_point, it saves `make_index_mask({obj_id: logical})`.
+                    
+                    single_obj_dict = {obj_id: logical_mask}
+                    # We reuse make_index_mask to format it correctly as a uint8 array
+                    formatted_mask = make_index_mask(single_obj_dict)
+                    if formatted_mask is not None:
+                        self.per_frame_masks[out_frame_idx][obj_id] = formatted_mask
+
         self.index_masks_all = []
         # Ensure frames are ordered
+        guru.info("Processing results...")
         for i in sorted(video_segments.keys()):
              masks = video_segments[i]
              if masks:
@@ -205,7 +315,7 @@ class PromptGUI(object):
             return "No masks to save."
         
         os.makedirs(output_dir, exist_ok=True)
-        for img_path, clr_mask, id_mask in zip(self.img_paths, self.color_masks_all, self.index_masks_all):
+        for img_path, clr_mask, id_mask in tqdm(zip(self.img_paths, self.color_masks_all, self.index_masks_all), total=len(self.img_paths), desc="Saving masks"):
             name = os.path.basename(img_path)
             out_path = f"{output_dir}/{name}"
             iio.imwrite(out_path, clr_mask)
