@@ -121,3 +121,126 @@
 2026-01-20 00:15:45.604 | INFO     | main:on_save:244 - Masks saved to /Users/taldugma/Downloads/test_masks
 2026-01-20 00:15:50.386 | INFO     | core:save_masks_to_dir:326 - Saved masks to /Users/taldugma/Downloads/test_masks!
 2026-01-20 00:15:50.387 | INFO     | main:on_save:244 - Masks saved to /Users/taldugma/Downloads/test_masks
+2026-01-20 00:27:43.303 | INFO     | main:run_app:311 - Preparing frames in /Users/taldugma/Downloads/test_frames...
+2026-01-20 00:27:43.304 | INFO     | utils:extract_video_frames:94 - Frames already exist in /Users/taldugma/Downloads/test_frames. Skipping extraction. Clear directory to re-extract.
+2026-01-20 00:27:43.591 | INFO     | core:init_sam_model:76 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 00:27:43.633 | INFO     | main:load_sequence:116 - Loaded 5 images from /Users/taldugma/Downloads/test_frames
+2026-01-20 00:27:52.163 | INFO     | core:get_sam_features:176 - SAM features extracted.
+2026-01-20 00:27:54.129 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:27:54.135 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:28:04.160 | INFO     | main:on_click:177 - Added point at 295, 261 frame 1
+2026-01-20 00:28:12.477 | INFO     | main:on_save:244 - Masks saved to /Users/taldugma/Downloads/test_masks
+2026-01-20 00:29:36.254 | INFO     | main:run_app:311 - Preparing frames in /Users/taldugma/Downloads/test_frames...
+2026-01-20 00:29:36.254 | INFO     | utils:extract_video_frames:94 - Frames already exist in /Users/taldugma/Downloads/test_frames. Skipping extraction. Clear directory to re-extract.
+2026-01-20 00:29:36.489 | INFO     | core:init_sam_model:76 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 00:29:36.566 | INFO     | main:load_sequence:116 - Loaded 5 images from /Users/taldugma/Downloads/test_frames
+2026-01-20 00:29:45.166 | INFO     | core:get_sam_features:176 - SAM features extracted.
+2026-01-20 00:29:46.829 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:29:46.833 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:29:48.855 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:29:48.857 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:29:49.885 | INFO     | main:on_click:177 - Added point at 282, 240 frame 0
+2026-01-20 00:29:51.086 | INFO     | main:on_save:244 - Masks saved to /Users/taldugma/Downloads/test_masks
+2026-01-20 00:31:59.345 | INFO     | main:run_app:311 - Preparing frames in /Users/taldugma/Downloads/test_frames...
+2026-01-20 00:31:59.346 | INFO     | utils:extract_video_frames:94 - Frames already exist in /Users/taldugma/Downloads/test_frames. Skipping extraction. Clear directory to re-extract.
+2026-01-20 00:31:59.581 | INFO     | core:init_sam_model:76 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 00:31:59.609 | INFO     | main:load_sequence:116 - Loaded 5 images from /Users/taldugma/Downloads/test_frames
+2026-01-20 00:32:08.136 | INFO     | core:get_sam_features:176 - SAM features extracted.
+2026-01-20 00:32:14.541 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:32:14.545 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:32:16.825 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:32:16.832 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:32:18.464 | INFO     | main:on_click:177 - Added point at 437, 294 frame 0
+2026-01-20 00:32:21.261 | INFO     | main:on_save:244 - Masks saved to /Users/taldugma/Downloads/test_masks
+2026-01-20 00:34:34.802 | INFO     | main:run_app:311 - Preparing frames in /Users/taldugma/Downloads/test_frames...
+2026-01-20 00:34:34.802 | INFO     | utils:extract_video_frames:94 - Frames already exist in /Users/taldugma/Downloads/test_frames. Skipping extraction. Clear directory to re-extract.
+2026-01-20 00:34:35.044 | INFO     | core:init_sam_model:76 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 00:34:35.073 | INFO     | main:load_sequence:116 - Loaded 5 images from /Users/taldugma/Downloads/test_frames
+2026-01-20 00:34:43.765 | INFO     | core:get_sam_features:176 - SAM features extracted.
+2026-01-20 00:34:47.451 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:34:47.457 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:34:48.556 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:34:48.561 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:34:49.386 | INFO     | main:on_click:177 - Added point at 270, 266 frame 0
+2026-01-20 00:34:50.354 | INFO     | core:save_masks_to_dir:315 - No masks to save.
+2026-01-20 00:34:50.354 | INFO     | main:on_save:244 - Masks saved to /Users/taldugma/Downloads/test_masks
+2026-01-20 00:37:19.460 | INFO     | main:run_app:310 - Preparing frames in /Users/taldugma/Downloads/test_frames...
+2026-01-20 00:37:19.460 | INFO     | utils:extract_video_frames:94 - Frames already exist in /Users/taldugma/Downloads/test_frames. Skipping extraction. Clear directory to re-extract.
+2026-01-20 00:37:19.780 | INFO     | core:init_sam_model:76 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 00:37:19.807 | INFO     | main:load_sequence:116 - Loaded 5 images from /Users/taldugma/Downloads/test_frames
+2026-01-20 00:37:28.403 | INFO     | core:get_sam_features:176 - SAM features extracted.
+2026-01-20 00:37:30.191 | INFO     | core:set_input_image:137 - Setting frame 1 / 5
+2026-01-20 00:37:30.195 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:37:32.069 | INFO     | core:set_input_image:137 - Setting frame 0 / 5
+2026-01-20 00:37:32.075 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:37:33.614 | INFO     | main:on_click:177 - Added point at 447, 278 frame 0
+2026-01-20 00:37:34.905 | INFO     | core:save_masks_to_dir:317 - Saving masks to directory /Users/taldugma/Downloads/test_masks
+2026-01-20 00:37:34.909 | INFO     | core:save_masks_to_dir:340 - Saved masks to /Users/taldugma/Downloads/test_masks!
+2026-01-20 00:41:23.566 | INFO     | main:run_app:310 - Preparing frames in /Users/taldugma/Downloads/test_frames...
+2026-01-20 00:41:23.566 | INFO     | utils:extract_video_frames:94 - Frames already exist in /Users/taldugma/Downloads/test_frames. Skipping extraction. Clear directory to re-extract.
+2026-01-20 00:41:23.809 | INFO     | core:init_sam_model:76 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 00:41:23.838 | INFO     | main:load_sequence:116 - Loaded 5 images from /Users/taldugma/Downloads/test_frames
+2026-01-20 00:41:32.339 | INFO     | core:get_sam_features:177 - SAM features extracted.
+2026-01-20 00:41:34.106 | INFO     | core:set_input_image:138 - Setting frame 1 / 5
+2026-01-20 00:41:34.111 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:41:35.266 | INFO     | core:set_input_image:138 - Setting frame 0 / 5
+2026-01-20 00:41:35.272 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:41:36.437 | INFO     | main:on_click:177 - Added point at 280, 262 frame 0
+2026-01-20 00:41:39.207 | INFO     | core:save_masks_to_dir:321 - Saving masks to directory /Users/taldugma/Downloads/test_masks
+2026-01-20 00:41:39.219 | INFO     | core:save_masks_to_dir:343 - Saved mask 0_0.npy
+2026-01-20 00:41:39.220 | INFO     | core:save_masks_to_dir:346 - Saved masks to /Users/taldugma/Downloads/test_masks!
+2026-01-20 00:41:58.949 | INFO     | core:set_input_image:138 - Setting frame 1 / 5
+2026-01-20 00:41:58.954 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:42:08.560 | INFO     | main:on_click:177 - Added point at 284, 277 frame 1
+2026-01-20 00:42:11.434 | INFO     | core:set_input_image:138 - Setting frame 0 / 5
+2026-01-20 00:42:11.439 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:12.506 | INFO     | core:set_input_image:138 - Setting frame 1 / 5
+2026-01-20 00:42:12.511 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:13.880 | INFO     | core:set_input_image:138 - Setting frame 0 / 5
+2026-01-20 00:42:13.885 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:15.235 | INFO     | core:set_input_image:138 - Setting frame 1 / 5
+2026-01-20 00:42:15.241 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:16.335 | INFO     | core:set_input_image:138 - Setting frame 2 / 5
+2026-01-20 00:42:16.342 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:42:17.095 | INFO     | core:set_input_image:138 - Setting frame 3 / 5
+2026-01-20 00:42:17.102 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:42:17.943 | INFO     | core:set_input_image:138 - Setting frame 1 / 5
+2026-01-20 00:42:17.946 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:18.612 | INFO     | core:set_input_image:138 - Setting frame 0 / 5
+2026-01-20 00:42:18.616 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:20.200 | INFO     | core:set_input_image:138 - Setting frame 1 / 5
+2026-01-20 00:42:20.202 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:28.153 | INFO     | core:set_mask_id:102 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 00:42:29.598 | INFO     | main:on_click:177 - Added point at 431, 28 frame 1
+2026-01-20 00:42:31.252 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:31.911 | INFO     | core:set_mask_id:102 - Switched to Mask ID -1. Loaded 0 points.
+2026-01-20 00:42:33.980 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:36.552 | INFO     | core:set_input_image:138 - Setting frame 0 / 5
+2026-01-20 00:42:36.556 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:44.712 | INFO     | core:set_input_image:138 - Setting frame 1 / 5
+2026-01-20 00:42:44.715 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:45.910 | INFO     | core:set_input_image:138 - Setting frame 2 / 5
+2026-01-20 00:42:45.913 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:42:47.449 | INFO     | core:set_input_image:138 - Setting frame 3 / 5
+2026-01-20 00:42:47.455 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:42:48.219 | INFO     | core:set_input_image:138 - Setting frame 4 / 5
+2026-01-20 00:42:48.225 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:42:48.780 | INFO     | core:set_input_image:138 - Setting frame 3 / 5
+2026-01-20 00:42:48.787 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:42:48.978 | INFO     | core:set_input_image:138 - Setting frame 2 / 5
+2026-01-20 00:42:48.980 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 00:42:49.179 | INFO     | core:set_input_image:138 - Setting frame 1 / 5
+2026-01-20 00:42:49.181 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:42:49.409 | INFO     | core:set_input_image:138 - Setting frame 0 / 5
+2026-01-20 00:42:49.412 | INFO     | core:set_mask_id:102 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 00:43:05.373 | INFO     | core:save_masks_to_dir:321 - Saving masks to directory /Users/taldugma/Downloads/test_masks
+2026-01-20 00:43:05.381 | INFO     | core:save_masks_to_dir:343 - Saved mask 0_0.npy
+2026-01-20 00:43:05.386 | INFO     | core:save_masks_to_dir:343 - Saved mask 1_0.npy
+2026-01-20 00:43:05.386 | INFO     | core:save_masks_to_dir:343 - Saved mask 1_1.npy
+2026-01-20 00:43:05.387 | INFO     | core:save_masks_to_dir:346 - Saved masks to /Users/taldugma/Downloads/test_masks!
+2026-01-20 00:43:22.122 | INFO     | main:on_submit:231 - Running tracker... this might take a moment.
+2026-01-20 00:43:22.122 | INFO     | core:run_tracker:252 - Loading images for visualization...
+2026-01-20 00:43:22.143 | INFO     | core:run_tracker:263 - Propagating masks in video...
+2026-01-20 00:43:22.143 | INFO     | core:run_tracker:265 - started propagation
+2026-01-20 00:44:08.562 | INFO     | core:run_tracker:267 - propagated frame 0
+2026-01-20 00:44:08.563 | INFO     | core:run_tracker:267 - propagated frame 1

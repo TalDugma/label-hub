@@ -131,6 +131,7 @@ class PromptGUI(object):
         self.img_paths = [
             f"{img_dir}/{p}" for p in sorted(os.listdir(img_dir)) if isimage(p)
         ]
+        self.index_masks_all = [None] * len(self.img_paths)
         return len(self.img_paths)
 
     def set_input_image(self, i: int = 0) -> np.ndarray | None:
@@ -216,6 +217,9 @@ class PromptGUI(object):
         self.per_frame_points[frame_idx][self.cur_mask_idx] = list(self.selected_points)
         self.per_frame_labels[frame_idx][self.cur_mask_idx] = list(self.selected_labels)
         self.per_frame_masks[frame_idx][self.cur_mask_idx] = mask
+        
+        # Sync to index_masks_all to ensure it's saved even without running tracker
+        self.index_masks_all[frame_idx] = make_index_mask(self.per_frame_masks[frame_idx])
         
         return mask
     
@@ -311,12 +315,15 @@ class PromptGUI(object):
         return out_frames, self.color_masks_all
 
     def save_masks_to_dir(self, output_dir: str):
-        if not self.index_masks_all:
+        if not self.index_masks_all or all(m is None for m in self.index_masks_all):
+            guru.info("No masks to save.")
             return "No masks to save."
-        
+        guru.info(f"Saving masks to directory {output_dir}")
         os.makedirs(output_dir, exist_ok=True)
         # Using enumerate to ensure frame_idx is consistent with the list order
         for frame_idx, (img_path, idx_mask) in tqdm(enumerate(zip(self.img_paths, self.index_masks_all)), total=len(self.img_paths), desc="Saving masks"):
+            if idx_mask is None:
+                continue
             
             unique_ids = np.unique(idx_mask)
             for uid in unique_ids:
@@ -333,6 +340,7 @@ class PromptGUI(object):
                 out_name = f"{frame_idx}_{mask_id}.npy"
                 out_path = os.path.join(output_dir, out_name)
                 np.save(out_path, binary_mask)
+                guru.info(f"Saved mask {out_name}")
         
         message = f"Saved masks to {output_dir}!"
         guru.info(message)

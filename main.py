@@ -241,7 +241,6 @@ class MatplotlibGUI:
             guru.warning("No output directory set for masks.")
             return
         self.prompts.save_masks_to_dir(self.output_mask_dir)
-        guru.info(f"Masks saved to {self.output_mask_dir}")
 
     def block_until_closed(self):
         """
