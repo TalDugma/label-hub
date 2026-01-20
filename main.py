@@ -6,18 +6,21 @@ import ipywidgets as widgets
 from ipyevents import Event
 from PIL import Image as PILImage
 from loguru import logger as guru
-from core import PromptGUI
+from loguru import logger as guru
+from core import PromptGUI, init_model
 from utils import compose_img_mask, draw_points, get_hls_palette, extract_video_frames
 
 class IPyWidgetsGUI:
-    def __init__(self, checkpoint_dir, model_cfg, device=None):
-        self.prompts = PromptGUI(checkpoint_dir, model_cfg, device=device)
+    def __init__(self, sam_model, device=None):
+        self.prompts = PromptGUI(sam_model, device=device)
         
         self.frames_dir = None
         self.output_mask_dir = None
         
         # UI Elements
-        self.image_widget = widgets.Image(format='jpeg', width=600, height=400)
+        # We will set layout dimensions dynamically in update_display
+        self.image_widget = widgets.Image(format='jpeg')
+        self.image_widget.layout.object_fit = 'contain'  # Ensure it fits if constraints apply, though we will set explicit size
         self.image_event = Event(source=self.image_widget, watched_events=['click'])
         self.image_event.on_dom_event(self.on_click)
         
@@ -136,7 +139,21 @@ class IPyWidgetsGUI:
         pil_img = PILImage.fromarray(display_img)
         with io.BytesIO() as b:
             pil_img.save(b, format='JPEG')
+        with io.BytesIO() as b:
+            pil_img.save(b, format='JPEG')
             self.image_widget.value = b.getvalue()
+            
+        # Update Widget Dimensions to match aspect ratio
+        # Start with a base width
+        base_w = 600
+        h, w = display_img.shape[:2]
+        base_h = int(base_w * (h / w))
+        
+        self.image_widget.layout.width = f"{base_w}px"
+        self.image_widget.layout.height = f"{base_h}px"
+        
+        # Store for click handler
+        self.display_dims = (base_w, base_h)
             
         # Update labels
         if self.prompts.cur_mask_idx == -1:
@@ -183,16 +200,19 @@ class IPyWidgetsGUI:
         # Ideally we know the displayed width/height.
         # self.image_widget.width is '600'.
         
-        disp_w = 600
-        # h?
+        if not hasattr(self, 'display_dims'):
+            # Fallback if update_display wasn't called or didn't set it (shouldn't happen)
+            disp_w = 600
+        else:
+             disp_w, disp_h = self.display_dims
+
         scale_x = w / disp_w
-        # Aspect preservation means display height is determined by w/h ratio
-        disp_h = disp_w * (h / w)
-        scale_y = h / disp_h 
-        
-        # But wait, we specified height=400 in init. If we did, it might stretch/fit.
-        # Let's REMOVE height constraint to keep aspect ratio valid.
-        
+        # We used explicit height calculation: h / base_h should equal w / base_w approx
+        if hasattr(self, 'display_dims'):
+             scale_y = h / self.display_dims[1]
+        else:
+             scale_y = scale_x
+
         x = event['relativeX'] * scale_x
         y = event['relativeY'] * scale_y
         
@@ -272,8 +292,7 @@ class IPyWidgetsGUI:
 
 def run_app(
     video_path, 
-    checkpoint_dir, 
-    model_cfg, 
+    model,
     device=None, 
     log_file=None, 
     output_mask_dir=None,
@@ -325,7 +344,7 @@ def run_app(
         return None
         
     # Init App
-    app = IPyWidgetsGUI(checkpoint_dir, model_cfg, device=device)
+    app = IPyWidgetsGUI(model, device=device)
     app.load_sequence(
         frames_dir, 
         output_mask_dir=output_mask_dir, 

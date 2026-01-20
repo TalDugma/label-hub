@@ -23,11 +23,24 @@ def make_index_mask(masks):
         idx_mask[mask > 0] = i + 1
     return idx_mask
 
-class PromptGUI(object):
-    def __init__(self, checkpoint_dir, model_cfg, device=None):
-        self.checkpoint_dir = checkpoint_dir
-        self.model_cfg = model_cfg
+def init_model(checkpoint_dir, model_cfg, device=None):
+    if device is None:
+        if torch.cuda.is_available():
+            device = "cuda"
+        else:
+            torch.autocast("cpu", dtype=torch.bfloat16).__enter__()
+            device = "cpu"
+            
+    if "cuda" in device and torch.cuda.get_device_properties(0).major >= 8:
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
         
+    sam_model = build_sam2_video_predictor(model_cfg, checkpoint_dir, device=device)
+    guru.info(f"loaded model checkpoint {checkpoint_dir} on {device}")
+    return sam_model
+
+class PromptGUI(object):
+    def __init__(self, sam_model, device=None):
         if device is None:
             if torch.cuda.is_available():
                 self.device = "cuda"
@@ -37,7 +50,7 @@ class PromptGUI(object):
         else:
             self.device = device
             
-        self.sam_model = None
+        self.sam_model = sam_model
         self.inference_state = None
 
         self.selected_points = []
@@ -66,19 +79,16 @@ class PromptGUI(object):
         self.start_frame = 0
         self.step = 1
         
-        self.init_sam_model()
+        self.step = 1
+        
+        # Check for float32 settings if likely needed for inference context, 
+        # though build_sam2_video_predictor might have handled some.
+        if "cuda" in self.device and torch.cuda.get_device_properties(0).major >= 8:
+             torch.backends.cuda.matmul.allow_tf32 = True
+             torch.backends.cudnn.allow_tf32 = True
 
-    def init_sam_model(self):
-        if self.sam_model is None:
-            # Check for float32 settings
-            if "cuda" in self.device and torch.cuda.get_device_properties(0).major >= 8:
-                torch.backends.cuda.matmul.allow_tf32 = True
-                torch.backends.cudnn.allow_tf32 = True
-            
-            # Use bfloat16 for the entire notebook/session context generally, 
-            # but we will just ensure the model is built correctly.
-            self.sam_model = build_sam2_video_predictor(self.model_cfg, self.checkpoint_dir, device=self.device)
-            guru.info(f"loaded model checkpoint {self.checkpoint_dir} on {self.device}")
+    # init_sam_model removed as model is passed in __init__
+
 
     def clear_points(self):
         self.selected_points.clear()
@@ -126,7 +136,7 @@ class PromptGUI(object):
         self.per_frame_masks = {}
 
     def reset(self):
-        self._clear_image()
+        self = PromptGUI(self.sam_model, self.device)
         if self.inference_state:
              self.sam_model.reset_state(self.inference_state)
 
