@@ -1,0 +1,14 @@
+numpy
+matplotlib
+opencv-python
+loguru
+torch
+torchvision
+tqdm
+imageio
+ipympl
+ipywidgets
+# sam2: install from https://github.com/facebookresearch/sam2
+# git clone https://github.com/facebookresearch/sam2.git
+# cd sam2 && pip install -e .
+# NOTE: This file does not include package versions.
