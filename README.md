@@ -8,7 +8,8 @@ A lightweight, interactive annotation tool for video object segmentation powered
 - **Multi-Object Support**: accurate mask management for multiple unique object IDs within the same video.
 - **SAM 2 Integration**: Leverages SAM 2 for state-of-the-art zero-shot object selection and video tracking/propagation.
 - **Notebook Native**: Built with `ipympl` (matplotlib widget) for seamless integration into Jupyter Lake/Lab/Notebook environments.
-- **Automated Frame Extraction**: Automatically extracts frames from input video files using FFmpeg (via `imageio`/`ffmpeg`).
+- **Automated Frame Extraction**: Automatically extracts frames from input video files using `cv2`.
+- **Frame Slicing**: Support for processing video subsets (start/end/step) while maintaining original frame indices in output.
 - **Mask Persistence**: Saves binary masks as `.npy` files for efficient storage and loading.
 
 ## Installation
@@ -53,7 +54,16 @@ cfg = "configs/sam2.1/sam2.1_hiera_t.yaml" # Relative to sam2 library or absolut
 video_path = "/path/to/video.mp4"
 
 # Launch the App
-app = run_app(video_path, checkpoint, cfg, log_file="labeling.log")
+# Optional slicing: start_frame, end_frame, step
+app = run_app(
+    video_path, 
+    checkpoint, 
+    cfg, 
+    log_file="labeling.log",
+    start_frame=0, 
+    end_frame=100, 
+    step=5
+)
 ```
 
 ### GUI Controls
