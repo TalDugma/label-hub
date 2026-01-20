@@ -588,3 +588,145 @@
 2026-01-20 17:16:24.413 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
 2026-01-20 17:16:25.346 | INFO     | core:set_input_image:296 - Setting frame 29 / 30
 2026-01-20 17:16:25.352 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:22:59.021 | INFO     | core:init_model:174 - Initializing SAM2Worker via Proxy on cuda...
+2026-01-20 17:23:10.876 | INFO     | core:init_model:174 - Initializing SAM2Worker via Proxy on mps...
+2026-01-20 17:23:31.511 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st1...
+2026-01-20 17:23:31.512 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:23:31.547 | INFO     | main:load_sequence:120 - Loaded 30 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st1
+2026-01-20 17:23:34.693 | INFO     | core:get_sam_features:353 - SAM features extracted (in worker).
+2026-01-20 17:23:37.356 | INFO     | core:set_input_image:310 - Setting frame 8 / 30
+2026-01-20 17:23:37.374 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:23:38.966 | INFO     | core:set_input_image:310 - Setting frame 0 / 30
+2026-01-20 17:23:38.970 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:23:40.707 | INFO     | core:set_input_image:310 - Setting frame 2 / 30
+2026-01-20 17:23:40.711 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:23:43.224 | INFO     | core:set_input_image:310 - Setting frame 6 / 30
+2026-01-20 17:23:43.230 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:23:49.165 | INFO     | main:on_click:181 - Added point at 705, 72 frame 6
+2026-01-20 17:23:53.490 | INFO     | main:on_label_type_change:216 - Switched to Negative Labels
+2026-01-20 17:23:56.400 | INFO     | main:on_click:181 - Added point at 737, 241 frame 6
+2026-01-20 17:23:58.795 | INFO     | core:set_input_image:310 - Setting frame 16 / 30
+2026-01-20 17:23:58.800 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:23:59.806 | INFO     | core:set_input_image:310 - Setting frame 5 / 30
+2026-01-20 17:23:59.810 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:24:03.255 | INFO     | core:set_input_image:310 - Setting frame 20 / 30
+2026-01-20 17:24:03.262 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:24:04.185 | INFO     | core:set_input_image:310 - Setting frame 25 / 30
+2026-01-20 17:24:04.190 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:24:07.381 | INFO     | main:on_submit:235 - Running tracker... this might take a moment.
+2026-01-20 17:24:07.382 | INFO     | core:run_tracker:420 - Loading images for visualization...
+2026-01-20 17:24:07.462 | INFO     | core:run_tracker:425 - Propagating masks in video... (Worker)
+2026-01-20 17:24:07.462 | INFO     | core:run_tracker:428 - started propagation
+2026-01-20 17:25:58.163 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st1...
+2026-01-20 17:25:58.164 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:25:58.238 | INFO     | main:load_sequence:120 - Loaded 30 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st1
+2026-01-20 17:26:00.815 | INFO     | core:get_sam_features:353 - SAM features extracted (in worker).
+2026-01-20 17:26:07.703 | INFO     | core:init_model:174 - Initializing SAM2Worker via Proxy on cpu...
+2026-01-20 17:26:07.736 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st1...
+2026-01-20 17:26:07.737 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:26:07.774 | INFO     | main:load_sequence:120 - Loaded 30 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st1
+2026-01-20 17:26:09.716 | INFO     | core:get_sam_features:353 - SAM features extracted (in worker).
+2026-01-20 17:26:12.886 | INFO     | core:set_input_image:310 - Setting frame 6 / 30
+2026-01-20 17:26:12.891 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:26:13.780 | INFO     | core:set_input_image:310 - Setting frame 15 / 30
+2026-01-20 17:26:13.786 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:26:17.844 | INFO     | main:on_click:181 - Added point at 680, 92 frame 15
+2026-01-20 17:26:19.886 | INFO     | core:set_input_image:310 - Setting frame 5 / 30
+2026-01-20 17:26:19.893 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:26:21.289 | INFO     | core:set_input_image:310 - Setting frame 0 / 30
+2026-01-20 17:26:21.294 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:26:25.492 | INFO     | core:set_input_image:310 - Setting frame 16 / 30
+2026-01-20 17:26:25.497 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:26:27.776 | INFO     | main:on_click:181 - Added point at 376, 308 frame 16
+2026-01-20 17:26:34.355 | INFO     | main:on_submit:235 - Running tracker... this might take a moment.
+2026-01-20 17:26:34.355 | INFO     | core:run_tracker:420 - Loading images for visualization...
+2026-01-20 17:26:34.426 | INFO     | core:run_tracker:425 - Propagating masks in video... (Worker)
+2026-01-20 17:26:34.426 | INFO     | core:run_tracker:428 - started propagation
+2026-01-20 17:26:36.764 | ERROR    | core:propagate_in_video:151 - Propagation error: mat1 and mat2 must have the same dtype, but got BFloat16 and Float
+2026-01-20 17:26:36.765 | INFO     | core:run_tracker:447 - Processing results...
+2026-01-20 17:26:36.766 | INFO     | main:on_submit:237 - Tracking complete. Results loaded into view.
+2026-01-20 17:26:47.114 | INFO     | core:set_input_image:310 - Setting frame 12 / 30
+2026-01-20 17:26:47.118 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:26:48.146 | INFO     | core:set_input_image:310 - Setting frame 20 / 30
+2026-01-20 17:26:48.149 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:26:48.828 | INFO     | core:set_input_image:310 - Setting frame 24 / 30
+2026-01-20 17:26:48.833 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:27:04.107 | INFO     | core:init_model:174 - Initializing SAM2Worker via Proxy on mps...
+2026-01-20 17:27:04.138 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st1...
+2026-01-20 17:27:04.139 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:27:04.228 | INFO     | main:load_sequence:120 - Loaded 30 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st1
+2026-01-20 17:27:08.909 | INFO     | core:get_sam_features:353 - SAM features extracted (in worker).
+2026-01-20 17:27:15.728 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e6_st1...
+2026-01-20 17:27:15.729 | INFO     | utils:extract_video_frames:99 - Extracting frames from /Users/taldugma/Downloads/B7.mp4 to /Users/taldugma/Downloads/B7_frames_s0_e6_st1...
+2026-01-20 17:27:15.733 | INFO     | utils:extract_video_frames:121 - Extraction config: Start=0, End=6, Step=1, SrcFPS=30.00
+2026-01-20 17:27:15.786 | INFO     | utils:extract_video_frames:157 - Extracted 6 frames.
+2026-01-20 17:27:15.817 | INFO     | main:load_sequence:120 - Loaded 6 images from /Users/taldugma/Downloads/B7_frames_s0_e6_st1
+2026-01-20 17:27:16.441 | INFO     | core:get_sam_features:353 - SAM features extracted (in worker).
+2026-01-20 17:27:19.732 | INFO     | core:set_input_image:310 - Setting frame 2 / 6
+2026-01-20 17:27:19.734 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:27:21.078 | INFO     | core:set_input_image:310 - Setting frame 4 / 6
+2026-01-20 17:27:21.083 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:27:26.944 | INFO     | main:on_click:181 - Added point at 535, 120 frame 4
+2026-01-20 17:27:32.926 | INFO     | main:on_submit:235 - Running tracker... this might take a moment.
+2026-01-20 17:27:32.927 | INFO     | core:run_tracker:420 - Loading images for visualization...
+2026-01-20 17:27:32.942 | INFO     | core:run_tracker:425 - Propagating masks in video... (Worker)
+2026-01-20 17:27:32.942 | INFO     | core:run_tracker:428 - started propagation
+2026-01-20 17:28:49.499 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e6_st1...
+2026-01-20 17:28:49.499 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e6_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:28:49.539 | INFO     | main:load_sequence:120 - Loaded 6 images from /Users/taldugma/Downloads/B7_frames_s0_e6_st1
+2026-01-20 17:28:50.842 | INFO     | core:get_sam_features:353 - SAM features extracted (in worker).
+2026-01-20 17:28:53.414 | INFO     | core:set_input_image:310 - Setting frame 2 / 6
+2026-01-20 17:28:53.419 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:28:54.713 | INFO     | core:set_input_image:310 - Setting frame 3 / 6
+2026-01-20 17:28:54.718 | INFO     | core:set_mask_id:269 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:28:57.067 | INFO     | main:on_click:181 - Added point at 712, 86 frame 3
+2026-01-20 17:28:59.864 | INFO     | main:on_submit:235 - Running tracker... this might take a moment.
+2026-01-20 17:28:59.864 | INFO     | core:run_tracker:420 - Loading images for visualization...
+2026-01-20 17:28:59.880 | INFO     | core:run_tracker:425 - Propagating masks in video... (Worker)
+2026-01-20 17:28:59.880 | INFO     | core:run_tracker:428 - started propagation
+2026-01-20 17:36:49.239 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e6_st1...
+2026-01-20 17:36:49.240 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e6_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:36:49.276 | INFO     | main:load_sequence:120 - Loaded 6 images from /Users/taldugma/Downloads/B7_frames_s0_e6_st1
+2026-01-20 17:36:50.542 | INFO     | core:get_sam_features:358 - SAM features extracted (in worker).
+2026-01-20 17:37:05.385 | INFO     | core:set_input_image:315 - Setting frame 1 / 6
+2026-01-20 17:37:05.389 | INFO     | core:set_mask_id:274 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:37:07.510 | INFO     | core:set_input_image:315 - Setting frame 2 / 6
+2026-01-20 17:37:07.514 | INFO     | core:set_mask_id:274 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:37:08.767 | INFO     | core:set_input_image:315 - Setting frame 3 / 6
+2026-01-20 17:37:08.771 | INFO     | core:set_mask_id:274 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:37:11.191 | INFO     | main:on_click:181 - Added point at 720, 81 frame 3
+2026-01-20 17:37:39.825 | INFO     | core:set_input_image:315 - Setting frame 2 / 6
+2026-01-20 17:37:39.828 | INFO     | core:set_mask_id:274 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:37:42.059 | INFO     | core:set_input_image:315 - Setting frame 4 / 6
+2026-01-20 17:37:42.064 | INFO     | core:set_mask_id:274 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:37:43.744 | INFO     | main:on_submit:235 - Running tracker... this might take a moment.
+2026-01-20 17:37:43.745 | INFO     | core:run_tracker:425 - Loading images for visualization...
+2026-01-20 17:37:43.757 | INFO     | core:run_tracker:430 - Propagating masks in video... (Worker)
+2026-01-20 17:37:43.757 | INFO     | core:run_tracker:433 - started propagation
+2026-01-20 17:41:16.407 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e6_st1...
+2026-01-20 17:41:16.407 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e6_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:41:16.442 | INFO     | main:load_sequence:120 - Loaded 6 images from /Users/taldugma/Downloads/B7_frames_s0_e6_st1
+2026-01-20 17:41:17.718 | INFO     | core:get_sam_features:359 - SAM features extracted (in worker).
+2026-01-20 17:41:19.995 | INFO     | core:set_input_image:316 - Setting frame 1 / 6
+2026-01-20 17:41:19.999 | INFO     | core:set_mask_id:275 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:41:21.028 | INFO     | core:set_input_image:316 - Setting frame 3 / 6
+2026-01-20 17:41:21.033 | INFO     | core:set_mask_id:275 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:41:22.472 | INFO     | main:on_click:181 - Added point at 373, 404 frame 3
+2026-01-20 17:41:24.378 | INFO     | main:on_submit:235 - Running tracker... this might take a moment.
+2026-01-20 17:41:24.378 | INFO     | core:run_tracker:426 - Loading images for visualization...
+2026-01-20 17:41:24.394 | INFO     | core:run_tracker:431 - Propagating masks in video... (Worker)
+2026-01-20 17:41:24.394 | INFO     | core:run_tracker:434 - started propagation
+2026-01-20 17:42:48.546 | INFO     | main:run_app:316 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e6_st1...
+2026-01-20 17:42:48.546 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e6_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:42:48.581 | INFO     | main:load_sequence:120 - Loaded 6 images from /Users/taldugma/Downloads/B7_frames_s0_e6_st1
+2026-01-20 17:42:49.940 | INFO     | core:get_sam_features:358 - SAM features extracted (in worker).
+2026-01-20 17:42:52.044 | INFO     | core:set_input_image:315 - Setting frame 4 / 6
+2026-01-20 17:42:52.048 | INFO     | core:set_mask_id:274 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:42:54.122 | INFO     | main:on_click:181 - Added point at 362, 392 frame 4
+2026-01-20 17:42:57.227 | INFO     | main:on_submit:235 - Running tracker... this might take a moment.
+2026-01-20 17:42:57.227 | INFO     | core:run_tracker:425 - Loading images for visualization...
+2026-01-20 17:42:57.244 | INFO     | core:run_tracker:430 - Propagating masks in video... (Worker)
+2026-01-20 17:42:57.244 | INFO     | core:run_tracker:433 - started propagation
+2026-01-20 17:42:58.016 | ERROR    | core:propagate_in_video:156 - Propagation error: mat1 and mat2 must have the same dtype, but got BFloat16 and Float
+2026-01-20 17:42:58.016 | INFO     | core:run_tracker:452 - Processing results...
+2026-01-20 17:42:58.017 | INFO     | main:on_submit:237 - Tracking complete. Results loaded into view.

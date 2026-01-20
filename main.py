@@ -9,8 +9,8 @@ from core import PromptGUI
 from utils import compose_img_mask, draw_points, get_hls_palette, extract_frames, listdir
 
 class MatplotlibGUI:
-    def __init__(self, checkpoint_dir, model_cfg, device=None):
-        self.prompts = PromptGUI(checkpoint_dir, model_cfg, device=device)
+    def __init__(self, model, device=None):
+        self.prompts = PromptGUI(model, device=device)
         
         self.frames_dir = None
         self.output_mask_dir = None
@@ -266,8 +266,7 @@ class MatplotlibGUI:
 
 def run_app(
     video_path, 
-    checkpoint_dir, 
-    model_cfg, 
+    model, 
     device=None, 
     block=False, 
     log_file=None, 
@@ -328,7 +327,7 @@ def run_app(
         return None
         
     # Init App
-    app = MatplotlibGUI(checkpoint_dir, model_cfg, device=device)
+    app = MatplotlibGUI(model, device=device)
     app.load_sequence(
         frames_dir, 
         output_mask_dir=output_mask_dir, 

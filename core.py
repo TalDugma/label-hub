@@ -12,8 +12,13 @@ import threading
 import queue # For the proxy queue
 
 # Worker loop function that runs in a separate process
-def sam2_worker_loop(input_queue, output_queue, checkpoint_dir, model_cfg, device):
+def sam2_worker_loop(input_queue, output_queue, checkpoint_dir, model_cfg, device, log_file=None):
     try:
+        # Initialize logging in worker if file provided
+        if log_file:
+            guru.remove()
+            guru.add(log_file, level="INFO", enqueue=True)
+            
         # Initialize model in the worker process
         # Check for float32 settings inside the worker process where it matters
         if "cuda" in device and torch.cuda.get_device_properties(0).major >= 8:
@@ -108,14 +113,14 @@ def sam2_worker_loop(input_queue, output_queue, checkpoint_dir, model_cfg, devic
         traceback.print_exc()
 
 class SAM2Proxy:
-    def __init__(self, checkpoint_dir, model_cfg, device):
+    def __init__(self, checkpoint_dir, model_cfg, device, log_file=None):
         self.ctx = mp.get_context('spawn')
         self.input_queue = self.ctx.Queue()
         self.output_queue = self.ctx.Queue()
         
         self.process = self.ctx.Process(
             target=sam2_worker_loop,
-            args=(self.input_queue, self.output_queue, checkpoint_dir, model_cfg, device)
+            args=(self.input_queue, self.output_queue, checkpoint_dir, model_cfg, device, log_file)
         )
         self.process.start()
         
@@ -162,6 +167,19 @@ class SAM2Proxy:
         if self.process.is_alive():
             self.process.terminate()
 
+def init_model(checkpoint_dir, model_cfg, device=None, log_file=None):
+    if device is None:
+        if torch.cuda.is_available():
+            device = "cuda"
+        else:
+            # Although we might not need autocast here as proxy handles it, 
+            # we keep consistent logic or just string.
+            device = "cpu"
+            
+    guru.info(f"Initializing SAM2Worker via Proxy on {device}...")
+    sam_model = SAM2Proxy(checkpoint_dir, model_cfg, device, log_file=log_file)
+    return sam_model
+
 # Ideally make_index_mask should be in utils or a static method. 
 # Let's put it as a static method or helper here since it deals with mask logic.
 
@@ -178,20 +196,25 @@ def make_index_mask(masks):
     return idx_mask
 
 class PromptGUI(object):
-    def __init__(self, checkpoint_dir, model_cfg, device=None):
-        self.checkpoint_dir = checkpoint_dir
-        self.model_cfg = model_cfg
+    def __init__(self, sam_model, device=None):
+        self.sam_model = sam_model
+        # device arg is now mostly for local autocast checks if needed, 
+        # or we could rely on model's device if we tracked it.
+        # But PromptGUI still uses 'device' for autocast check in run_tracker/add_point wrappers?
+        # Actually our wrappers now rely on logic inside worker.
+        # But `add_point` wrapper in PromptGUI still has that check:
+        # if "cuda" in self.device...
+        # So we should keep device or infer it.
         
         if device is None:
+            # We assume if model was loaded on cuda, we are 'cuda' compliant
             if torch.cuda.is_available():
                 self.device = "cuda"
             else:
-                torch.autocast("cpu", dtype=torch.bfloat16).__enter__()
-                self.device = "cpu"
+                 self.device = "cpu"
         else:
             self.device = device
             
-        self.sam_model = None
         self.inference_state = None
 
         self.selected_points = []
@@ -220,13 +243,9 @@ class PromptGUI(object):
         self.start_frame = 0
         self.step = 1
         
-        self.init_sam_model()
+        # self.init_sam_model() removed
 
-    def init_sam_model(self):
-        if self.sam_model is None:
-            # We now use the proxy instead of building the model directly
-            self.sam_model = SAM2Proxy(self.checkpoint_dir, self.model_cfg, self.device)
-            guru.info(f"SAM2Worker process started via Proxy.")
+    # init_sam_model removed
 
     def clear_points(self):
         self.selected_points.clear()
@@ -415,7 +434,7 @@ class PromptGUI(object):
         
         # Proxy.propagate_in_video yields (out_frame_idx, masks_dict)
         for out_frame_idx, masks in self.sam_model.propagate_in_video(self.inference_state, start_frame_idx=0):
-            # guru.info(f"propagated frame {out_frame_idx}") # Reduce spam if needed
+            guru.info(f"propagated frame {out_frame_idx}") # Reduce spam if needed
             video_segments[out_frame_idx] = masks
 
             # Update per_frame_masks for visualization
