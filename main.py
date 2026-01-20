@@ -99,7 +99,7 @@ class MatplotlibGUI:
         
         self.update_display()
 
-    def load_sequence(self, frames_dir, output_mask_dir=None):
+    def load_sequence(self, frames_dir, output_mask_dir=None, start_frame=0, step=1):
         """
         Load a sequence of frames from a directory.
         frames_dir: Path to the directory containing extracted frames.
@@ -107,6 +107,9 @@ class MatplotlibGUI:
         """
         self.frames_dir = frames_dir
         self.output_mask_dir = output_mask_dir
+        
+        # Configure slice info in prompts
+        self.prompts.set_slice_config(start_frame=start_frame, step=step)
         
         if not os.path.exists(self.frames_dir):
             guru.error(f"Image directory not found: {self.frames_dir}")
@@ -278,9 +281,21 @@ class MatplotlibGUI:
             
         guru.info("GUI closed.")
 
-def run_app(video_path, checkpoint_dir, model_cfg, device=None, block=False, log_file=None, output_mask_dir=None):
+def run_app(
+    video_path, 
+    checkpoint_dir, 
+    model_cfg, 
+    device=None, 
+    block=False, 
+    log_file=None, 
+    output_mask_dir=None,
+    start_frame=0,
+    end_frame=None,
+    step=None
+):
     """
     Main function to run the app in a notebook with a video path.
+    Supports slicing the video: start_frame, end_frame, step.
     """
     from utils import extract_video_frames
     import os
@@ -299,23 +314,44 @@ def run_app(video_path, checkpoint_dir, model_cfg, device=None, block=False, log
     video_name = os.path.splitext(video_msg)[0]
     base_dir = os.path.dirname(os.path.abspath(video_path))
     
-    # Frames directory (hidden or explicit)
-    frames_dir = os.path.join(base_dir, f"{video_name}_frames")
+    # Frames directory
+    # Append slice info to dir name to avoid conflicts if user extracts different slices
+    slice_suffix = ""
+    if start_frame > 0 or end_frame is not None or step is not None:
+         # Create a unique-ish suffix for the slice config
+         s = start_frame
+         e = "end" if end_frame is None else end_frame
+         st = "1" if step is None else step
+         slice_suffix = f"_s{s}_e{e}_st{st}"
+         
+    frames_dir = os.path.join(base_dir, f"{video_name}_frames{slice_suffix}")
     
     # Masks directory
     if output_mask_dir is None:
-        output_mask_dir = os.path.join(base_dir, f"{video_name}_masks")
+        output_mask_dir = os.path.join(base_dir, f"{video_name}_masks{slice_suffix}")
     
     # Extract frames
     guru.info(f"Preparing frames in {frames_dir}...")
-    success = extract_video_frames(video_path, frames_dir)
+    success = extract_video_frames(
+        video_path, 
+        frames_dir, 
+        start_frame=start_frame, 
+        end_frame=end_frame, 
+        step=step
+    )
+    
     if not success:
         guru.error("Failed to extract frames.")
         return None
         
     # Init App
     app = MatplotlibGUI(checkpoint_dir, model_cfg, device=device)
-    app.load_sequence(frames_dir, output_mask_dir=output_mask_dir)
+    app.load_sequence(
+        frames_dir, 
+        output_mask_dir=output_mask_dir, 
+        start_frame=start_frame,
+        step=step if step is not None else 1
+    )
     
     if block:
         app.block_until_closed()

@@ -79,9 +79,11 @@ def extract_frames(root_dir, vid_name, img_name, vid_file, start, end, fps, heig
     subprocess.call(cmd, shell=True)
     return out_dir
 
-def extract_video_frames(video_path, output_dir, fps=5, height=480, ext="jpg"):
+def extract_video_frames(video_path, output_dir, fps=5, height=480, ext="jpg", start_frame=0, end_frame=None, step=None):
     """
     Extracts frames from a video file to a specific directory.
+    Supports slicing with start_frame, end_frame, step.
+    If step is None, it is calculated from fps.
     """
     if not os.path.exists(video_path):
         guru.error(f"Video file not found: {video_path}")
@@ -96,18 +98,64 @@ def extract_video_frames(video_path, output_dir, fps=5, height=480, ext="jpg"):
 
     guru.info(f"Extracting frames from {video_path} to {output_dir}...")
     
-    # Simple ffmpeg command
-    cmd = (
-        f"ffmpeg -i \"{video_path}\" "
-        f"-vf 'scale=-1:{height},fps={fps}' \"{output_dir}/%05d.{ext}\" -hide_banner -loglevel error"
-    )
-    
-    try:
-        subprocess.call(cmd, shell=True)
-        return True
-    except Exception as e:
-        guru.error(f"Error extracting frames: {e}")
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        guru.error(f"Could not open video: {video_path}")
         return False
+        
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    vid_fps = cap.get(cv2.CAP_PROP_FPS)
+    
+    if end_frame is None:
+        actual_end = total_frames
+    else:
+        actual_end = min(end_frame, total_frames)
+        
+    # Determine step: priority to explicit step, otherwise calculate from fps
+    actual_step = 1
+    if step is not None:
+        actual_step = step
+    elif fps is not None and fps > 0 and vid_fps > 0:
+        actual_step = max(1, int(vid_fps / fps))
+        
+    guru.info(f"Extraction config: Start={start_frame}, End={actual_end}, Step={actual_step}, SrcFPS={vid_fps:.2f}")
+
+    # Set start position
+    cap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
+    
+    saved_count = 0
+    curr = start_frame
+    
+    while curr < actual_end:
+        ret, frame = cap.read()
+        if not ret:
+            break
+            
+        # Resize if needed
+        h, w = frame.shape[:2]
+        if height is not None and height > 0 and h != height:
+             scale = height / h
+             new_w = int(w * scale)
+             frame = cv2.resize(frame, (new_w, height))
+             
+        # Save frame
+        # Sequential filenames 00000, 00001... regardless of step
+        out_name = f"{saved_count:05d}.{ext}"
+        cv2.imwrite(os.path.join(output_dir, out_name), frame)
+        saved_count += 1
+        
+        curr += 1
+        
+        # Skip frames using grab() for speed
+        if actual_step > 1:
+             for _ in range(actual_step - 1):
+                 if not cap.grab():
+                     break
+                 curr += 1
+                 
+    cap.release()
+    guru.info(f"Extracted {saved_count} frames.")
+    return True
 
 def listdir(vid_dir):
     if vid_dir is not None and os.path.isdir(vid_dir):

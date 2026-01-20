@@ -61,6 +61,11 @@ class PromptGUI(object):
 
         self.img_dir = ""
         self.img_paths = []
+        
+        # Slicing info for mask saving reconstruction
+        self.start_frame = 0
+        self.step = 1
+        
         self.init_sam_model()
 
     def init_sam_model(self):
@@ -133,6 +138,11 @@ class PromptGUI(object):
         ]
         self.index_masks_all = [None] * len(self.img_paths)
         return len(self.img_paths)
+        
+    def set_slice_config(self, start_frame=0, step=1):
+        self.start_frame = start_frame
+        # Ensure step is at least 1 to avoid div by zero or stalls
+        self.step = step if step is not None and step >= 1 else 1
 
     def set_input_image(self, i: int = 0) -> np.ndarray | None:
         guru.info(f"Setting frame {i} / {len(self.img_paths)}")
@@ -336,11 +346,14 @@ class PromptGUI(object):
                 # Create binary mask for this ID
                 binary_mask = (idx_mask == uid).astype(np.uint8)
                 
-                # Save as {frame_idx}_{mask_id}.npy
-                out_name = f"{frame_idx}_{mask_id}.npy"
+                # Calculate original frame index based on slice config
+                orig_frame_idx = self.start_frame + (frame_idx * self.step)
+                
+                # Save as {orig_frame_idx}_{mask_id}.npy
+                out_name = f"{orig_frame_idx}_{mask_id}.npy"
                 out_path = os.path.join(output_dir, out_name)
                 np.save(out_path, binary_mask)
-                guru.info(f"Saved mask {out_name}")
+                guru.info(f"Saved mask {out_name} (local frame {frame_idx} -> original {orig_frame_idx})")
         
         message = f"Saved masks to {output_dir}!"
         guru.info(message)
