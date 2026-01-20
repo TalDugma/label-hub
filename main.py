@@ -1,143 +1,128 @@
+
 import os
-import matplotlib.pyplot as plt
-from matplotlib.widgets import Button, Slider, RadioButtons
+import io
 import numpy as np
-import cv2
+import ipywidgets as widgets
+from ipyevents import Event
+from PIL import Image as PILImage
 from loguru import logger as guru
 from core import PromptGUI
-from utils import compose_img_mask, draw_points, get_hls_palette, extract_frames, listdir
+from utils import compose_img_mask, draw_points, get_hls_palette, extract_video_frames
 
-class MatplotlibGUI:
+class IPyWidgetsGUI:
     def __init__(self, checkpoint_dir, model_cfg, device=None):
         self.prompts = PromptGUI(checkpoint_dir, model_cfg, device=device)
         
         self.frames_dir = None
         self.output_mask_dir = None
         
-        self.fig = None
-        self.ax = None
-        self.img_plot = None
-        
         # UI Elements
-        self.slider_frame = None
-        self.btn_next = None
-        self.btn_prev = None
-        self.radio_label = None
-        self.btn_add_mask = None
-        self.btn_clear = None
-        self.btn_submit = None
-        self.btn_save = None
-        self.btn_reset = None
-        self.btn_prev_id = None
-        self.btn_next_id = None
+        self.image_widget = widgets.Image(format='jpeg', width=600, height=400)
+        self.image_event = Event(source=self.image_widget, watched_events=['click'])
+        self.image_event.on_dom_event(self.on_click)
+        
+        self.slider_frame = widgets.IntSlider(description='Frame:', min=0, max=0, value=0)
+        self.slider_frame.observe(self.on_frame_change, names='value')
+        
+        self.btn_prev_frame = widgets.Button(description='< Prev', layout=widgets.Layout(width='80px'))
+        self.btn_next_frame = widgets.Button(description='Next >', layout=widgets.Layout(width='80px'))
+        self.btn_prev_frame.on_click(self.on_prev_frame)
+        self.btn_next_frame.on_click(self.on_next_frame)
+        
+        self.radio_label = widgets.RadioButtons(
+            options=['Positive', 'Negative'],
+            value='Positive',
+            description='Label:',
+            disabled=False
+        )
+        self.radio_label.observe(self.on_label_type_change, names='value')
+        
+        self.btn_prev_id = widgets.Button(description='< Prev ID')
+        self.btn_next_id = widgets.Button(description='Next ID >')
+        self.btn_prev_id.on_click(self.on_prev_id)
+        self.btn_next_id.on_click(self.on_next_id)
+        
+        self.mask_id_label = widgets.Label(value="Current Mask ID: 0")
+        
+        self.btn_clear = widgets.Button(description='Clear Points')
+        self.btn_clear.on_click(self.on_clear_points)
+        
+        self.btn_submit = widgets.Button(description='Submit/Track', button_style='success')
+        self.btn_submit.on_click(self.on_submit)
+        
+        self.btn_save = widgets.Button(description='Save Masks', button_style='info')
+        self.btn_save.on_click(self.on_save)
+        
+        self.btn_reset = widgets.Button(description='Reset All', button_style='danger')
+        self.btn_reset.on_click(self.on_reset)
+        
+        # Output widget for logs (optional, but good for feedback inside widget area)
+        self.out = widgets.Output(layout={'border': '1px solid black', 'height': '150px', 'overflow_y': 'scroll'})
         
         self.current_overlay_mask = None
         
-        self.setup_gui()
-        
-    def setup_gui(self):
-        # Create figure and axes
-        # We need a layout that allows for the image and standard controls
-        self.fig = plt.figure(figsize=(12, 8))
-        self.ax = self.fig.add_axes([0.05, 0.2, 0.7, 0.75]) # Left, Bottom, Width, Height
-        self.ax.set_title("SAM2 Interactive Labeler")
-        self.ax.axis('off')
+        # Build Layout
+        self.container = self.build_layout()
 
-        # Controls area (Right side and Bottom)
+    def build_layout(self):
+        # Frame Controls
+        frame_controls = widgets.HBox([self.btn_prev_frame, self.slider_frame, self.btn_next_frame])
         
-        # Frame Slider (Bottom)
-        ax_slider = self.fig.add_axes([0.1, 0.05, 0.6, 0.03])
-        self.slider_frame = Slider(ax_slider, 'Frame', 0, 1, valinit=0, valstep=1)
-        self.slider_frame.on_changed(self.on_frame_change)
-        
-        # Buttons (Right Side)
-        btn_width = 0.15
-        btn_height = 0.05
-        start_x = 0.8
-        start_y = 0.8
-        gap = 0.06
-        
-        # Label Type (Radio)
-        ax_radio = self.fig.add_axes([start_x, start_y, btn_width, 0.1])
-        self.radio_label = RadioButtons(ax_radio, ('Positive', 'Negative'))
-        self.radio_label.on_clicked(self.on_label_type_change)
-        
-        # Add Mask
         # Mask ID Controls
-        # Previous ID
-        ax_prev = self.fig.add_axes([start_x, start_y - 2*gap, btn_width / 2 - 0.01, btn_height])
-        self.btn_prev_id = Button(ax_prev, '< Prev ID')
-        self.btn_prev_id.on_clicked(self.on_prev_id)
+        id_controls = widgets.HBox([self.btn_prev_id, self.mask_id_label, self.btn_next_id])
         
-        # Next ID
-        ax_next = self.fig.add_axes([start_x + btn_width / 2 + 0.01, start_y - 2*gap, btn_width / 2 - 0.01, btn_height])
-        self.btn_next_id = Button(ax_next, 'Next ID >')
-        self.btn_next_id.on_clicked(self.on_next_id)
+        # Action Buttons
+        actions1 = widgets.HBox([self.radio_label, self.btn_clear])
+        actions2 = widgets.HBox([self.btn_submit, self.btn_save, self.btn_reset])
         
-        # Clear Points
-        ax_clear = self.fig.add_axes([start_x, start_y - 3*gap, btn_width, btn_height])
-        self.btn_clear = Button(ax_clear, 'Clear Points')
-        self.btn_clear.on_clicked(self.on_clear_points)
+        # Sidebar
+        sidebar = widgets.VBox([
+            widgets.HTML("<h3>Controls</h3>"),
+            frame_controls,
+            widgets.HTML("<hr>"),
+            id_controls,
+            actions1,
+            widgets.HTML("<hr>"),
+            actions2,
+            widgets.HTML("<hr>"),
+            self.out
+        ])
         
-        # Submit / Track
-        ax_submit = self.fig.add_axes([start_x, start_y - 4*gap, btn_width, btn_height])
-        self.btn_submit = Button(ax_submit, 'Submit/Track')
-        self.btn_submit.on_clicked(self.on_submit)
-        
-        # Save
-        ax_save = self.fig.add_axes([start_x, start_y - 5*gap, btn_width, btn_height])
-        self.btn_save = Button(ax_save, 'Save Masks')
-        self.btn_save.on_clicked(self.on_save)
-        
-        # Reset
-        ax_reset = self.fig.add_axes([start_x, start_y - 6*gap, btn_width, btn_height])
-        self.btn_reset = Button(ax_reset, 'Reset All')
-        self.btn_reset.on_clicked(self.on_reset)
-        
-        # Connect Click Event
-        self.fig.canvas.mpl_connect('button_press_event', self.on_click)
-        
-        self.update_display()
+        # Main Layout
+        main = widgets.HBox([self.image_widget, sidebar])
+        return main
+
+    def log(self, message, level="INFO"):
+        with self.out:
+            print(f"[{level}] {message}")
+        guru.log(level, message)
 
     def load_sequence(self, frames_dir, output_mask_dir=None, start_frame=0, step=1):
-        """
-        Load a sequence of frames from a directory.
-        frames_dir: Path to the directory containing extracted frames.
-        output_mask_dir: Path where masks will be saved.
-        """
         self.frames_dir = frames_dir
         self.output_mask_dir = output_mask_dir
         
-        # Configure slice info in prompts
         self.prompts.set_slice_config(start_frame=start_frame, step=step)
         
         if not os.path.exists(self.frames_dir):
-            guru.error(f"Image directory not found: {self.frames_dir}")
+            self.log(f"Image directory not found: {self.frames_dir}", "ERROR")
             return
             
         num_imgs = self.prompts.set_img_dir(self.frames_dir)
-        guru.info(f"Loaded {num_imgs} images from {frames_dir}")
+        self.log(f"Loaded {num_imgs} images from {frames_dir}")
         
-        # Update slider
-        self.slider_frame.valmax = max(0, num_imgs - 1)
-        self.slider_frame.val = 0
-        self.slider_frame.ax.set_xlim(0, max(0, num_imgs - 1))
+        self.slider_frame.max = max(0, num_imgs - 1)
+        self.slider_frame.value = 0
         
-        # Initialize SAM state for this sequence
         self.prompts.get_sam_features()
-        
         self.update_display()
 
     def update_display(self):
         if self.prompts.image is None:
-            self.ax.imshow(np.zeros((500, 500, 3)))
-            self.fig.canvas.draw_idle()
             return
-            
-        # Base image
+
         display_img = self.prompts.image.copy()
         
-        # Overlay Mask (if any)
+        # Overlay Mask
         if hasattr(self, 'current_overlay_mask') and self.current_overlay_mask is not None:
              palette = get_hls_palette(self.current_overlay_mask.max() + 1)
              color_mask = palette[self.current_overlay_mask]
@@ -147,146 +132,149 @@ class MatplotlibGUI:
         if self.prompts.selected_points:
              display_img = draw_points(display_img, self.prompts.selected_points, self.prompts.selected_labels)
              
-        self.ax.clear()
-        self.ax.clear()
-        self.ax.imshow(display_img)
+        # Convert to JPEG for widget
+        pil_img = PILImage.fromarray(display_img)
+        with io.BytesIO() as b:
+            pil_img.save(b, format='JPEG')
+            self.image_widget.value = b.getvalue()
+            
+        # Update labels
         if self.prompts.cur_mask_idx == -1:
-             title_str = f"Frame: {self.prompts.frame_index} | View: All Masks"
+             self.mask_id_label.value = "View: All Masks"
         else:
-             title_str = f"Frame: {self.prompts.frame_index} | Current Mask ID: {self.prompts.cur_mask_idx}"
-             
-        self.ax.set_title(title_str)
-        self.ax.axis('off')
-        self.fig.canvas.draw_idle()
+             self.mask_id_label.value = f"Current Mask ID: {self.prompts.cur_mask_idx}"
 
     def on_click(self, event):
-        if event.inaxes != self.ax:
-            return
+        # event contains 'relativeX', 'relativeY' which are relative to the widget
+        # We need to map them to image coordinates.
+        # Assuming widget width/height matches image aspect ratio or handled by object-fit.
+        # widgets.Image displays the image.
+        
         if self.prompts.image is None:
             return
             
-        # Matplotlib coordinates
-        x, y = event.xdata, event.ydata
-        if x is None or y is None:
-            return
-
+        # Image real dims
+        h, w = self.prompts.image.shape[:2]
+        
+        # Widget display dims (approximate if fixed, but better if we can get actual client rect,
+        # but ipyevents gives relativeX/Y to the element).
+        # WARNING: If the image is scaled by CSS, relativeX might need scaling.
+        # Simple approach: assume natural size or fixed size.
+        # widgets.Image(width=600) might scale the image.
+        # We can try to use raw data coordinate if possible, but IPyEvents gives pixel coords on element.
+        
+        # Let's assume the user sets width=600, height=400 in __init__.
+        # We need to calculate scale.
+        # Or better, let's not force width/height in widget to avoid aspect ratio issues, 
+        # but huge images are bad.
+        # For now, let's just use the coordinates and update logic if scaling is off.
+        # Actually, standard ipywidgets Image auto-scales to width.
+        
+        # To make this robust:
+        # We can rely on the fact that we sent a specific image size? No.
+        
+        # Let's try to map naively first.
+        # If visual glitches, we might need a fixed aspect ratio container.
+        
+        # Actually, ipyevents usually gives coordinates relative to the DOM element.
+        # If the image is 600px wide in DOM, x is 0-600.
+        # If original image is 1920px, we need scale = 1920/600.
+        
+        # Ideally we know the displayed width/height.
+        # self.image_widget.width is '600'.
+        
+        disp_w = 600
+        # h?
+        scale_x = w / disp_w
+        # Aspect preservation means display height is determined by w/h ratio
+        disp_h = disp_w * (h / w)
+        scale_y = h / disp_h 
+        
+        # But wait, we specified height=400 in init. If we did, it might stretch/fit.
+        # Let's REMOVE height constraint to keep aspect ratio valid.
+        
+        x = event['relativeX'] * scale_x
+        y = event['relativeY'] * scale_y
+        
         if self.prompts.cur_mask_idx == -1:
-            guru.warning("Cannot add points in 'All Masks' view. Switch to a specific ID to edit.")
+            self.log("Cannot add points in 'All Masks' view.", "WARNING")
             return
             
-        # Add point
-        # y is row, x is col
-        mask = self.prompts.add_point(self.prompts.frame_index, int(y), int(x)) 
-        guru.info(f"Added point at {int(x)}, {int(y)} frame {self.prompts.frame_index}")
+        mask = self.prompts.add_point(self.prompts.frame_index, int(y), int(x))
+        self.log(f"Added point at {int(x)}, {int(y)}")
         self.current_overlay_mask = mask
         self.update_display()
 
-    def on_frame_change(self, val):
-        idx = int(val)
+    def on_frame_change(self, change):
+        idx = change['new']
         if idx != self.prompts.frame_index:
             self.prompts.set_input_image(idx)
-            # Restore overlay mask if available (loaded by set_input_image's side effects or getter)
             self.current_overlay_mask = self.prompts.get_current_mask()
             self.update_display()
 
-    def on_prev_id(self, event):
-        # Allow going to -1 (All View)
+    def on_prev_frame(self, b):
+        if self.slider_frame.value > self.slider_frame.min:
+            self.slider_frame.value -= 1
+            
+    def on_next_frame(self, b):
+        if self.slider_frame.value < self.slider_frame.max:
+            self.slider_frame.value += 1
+
+    def on_prev_id(self, b):
         new_id = self.prompts.cur_mask_idx - 1
-        if new_id < -1: 
-             new_id = -1
-             
+        if new_id < -1: new_id = -1
         if new_id != self.prompts.cur_mask_idx:
             self.prompts.set_mask_id(new_id)
             self.current_overlay_mask = self.prompts.get_current_mask()
             self.update_display()
 
-    def on_next_id(self, event):
+    def on_next_id(self, b):
         new_id = self.prompts.cur_mask_idx + 1
         self.prompts.set_mask_id(new_id)
         self.current_overlay_mask = self.prompts.get_current_mask()
         self.update_display()
 
-    def on_label_type_change(self, label):
-        if label == 'Positive':
+    def on_label_type_change(self, change):
+        if change['new'] == 'Positive':
             self.prompts.set_positive()
-            guru.info("Switched to Positive Labels")
         else:
             self.prompts.set_negative()
-            guru.info("Switched to Negative Labels")
 
-
-
-    def on_clear_points(self, event):
+    def on_clear_points(self, b):
         self.prompts.clear_points()
-        guru.info("Cleared points for current mask.")
         self.current_overlay_mask = None
         self.update_display()
+        self.log("Points cleared.")
 
-    def on_reset(self, event):
+    def on_reset(self, b):
         self.prompts.reset()
-        guru.info("Reset all states.")
         self.current_overlay_mask = None
-        # Reload current image
         self.prompts.set_input_image(self.prompts.frame_index)
         self.update_display()
+        self.log("Reset all.")
 
-    def on_submit(self, event):
-        guru.info("Running tracker... this might take a moment.")
-        out_frames, color_masks = self.prompts.run_tracker()
-        guru.info("Tracking complete. Results loaded into view.")
-        
-        # Refresh current view
-        self.current_overlay_mask = self.prompts.get_current_mask()
-        self.update_display()
-        
-    def on_save(self, event):
+    def on_submit(self, b):
+        self.log("Running tracker...")
+        try:
+            out_frames, color_masks = self.prompts.run_tracker()
+            self.current_overlay_mask = self.prompts.get_current_mask()
+            self.update_display()
+            self.log("Tracking complete.")
+        except Exception as e:
+            self.log(f"Tracking failed: {e}", "ERROR")
+
+    def on_save(self, b):
         if not self.output_mask_dir:
-            guru.warning("No output directory set for masks.")
+            self.log("No output directory set.", "WARNING")
             return
         self.prompts.save_masks_to_dir(self.output_mask_dir)
-
-    def block_until_closed(self):
-        """
-        Blocks the execution until the figure is closed.
-        Uses explicit draw and start_event_loop to ensure visibility and responsiveness.
-        """
-        if not self.fig:
-             return
-             
-        guru.info("Launching GUI... (Cell active)")
-        plt.show(block=False)
-        
-        # Force an initial draw and flush to ensure window is not blank
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
-        
-        try:
-            while plt.fignum_exists(self.fig.number):
-                # Run the backend's event loop for a short slice
-                # This should handle painting and inputs correctly without re-showing (infinite windows)
-                self.fig.canvas.start_event_loop(0.1)
-        except KeyboardInterrupt:
-            guru.info("Execution stopped by user.")
-            plt.close(self.fig)
-        except Exception as e:
-            # Fallback for backends that might not support start_event_loop well
-            guru.warning(f"Warning: {e}. Falling back to sleep loop.")
-            import time
-            while plt.fignum_exists(self.fig.number):
-                try:
-                    self.fig.canvas.flush_events()
-                except:
-                    pass
-                time.sleep(0.1)
-            
-        guru.info("GUI closed.")
+        self.log(f"Masks saved to {self.output_mask_dir}")
 
 def run_app(
     video_path, 
     checkpoint_dir, 
     model_cfg, 
     device=None, 
-    block=False, 
     log_file=None, 
     output_mask_dir=None,
     start_frame=0,
@@ -295,15 +283,12 @@ def run_app(
 ):
     """
     Main function to run the app in a notebook with a video path.
-    Supports slicing the video: start_frame, end_frame, step.
     """
-    from utils import extract_video_frames
-    import os
     
-    # Configure logging if requested
+    # Configure logging
     if log_file:
         guru.remove()
-        guru.add(log_file, level="INFO", enqueue=True) # enqueue=True for thread safety/async
+        guru.add(log_file, level="INFO", enqueue=True)
     
     if not os.path.exists(video_path):
         guru.error(f"Error: Video path {video_path} does not exist.")
@@ -314,11 +299,9 @@ def run_app(
     video_name = os.path.splitext(video_msg)[0]
     base_dir = os.path.dirname(os.path.abspath(video_path))
     
-    # Frames directory
-    # Append slice info to dir name to avoid conflicts if user extracts different slices
+    # Frames/Masks directories
     slice_suffix = ""
     if start_frame > 0 or end_frame is not None or step is not None:
-         # Create a unique-ish suffix for the slice config
          s = start_frame
          e = "end" if end_frame is None else end_frame
          st = "1" if step is None else step
@@ -326,12 +309,10 @@ def run_app(
          
     frames_dir = os.path.join(base_dir, f"{video_name}_frames{slice_suffix}")
     
-    # Masks directory
     if output_mask_dir is None:
         output_mask_dir = os.path.join(base_dir, f"{video_name}_masks{slice_suffix}")
     
     # Extract frames
-    guru.info(f"Preparing frames in {frames_dir}...")
     success = extract_video_frames(
         video_path, 
         frames_dir, 
@@ -341,19 +322,15 @@ def run_app(
     )
     
     if not success:
-        guru.error("Failed to extract frames.")
         return None
         
     # Init App
-    app = MatplotlibGUI(checkpoint_dir, model_cfg, device=device)
+    app = IPyWidgetsGUI(checkpoint_dir, model_cfg, device=device)
     app.load_sequence(
         frames_dir, 
         output_mask_dir=output_mask_dir, 
         start_frame=start_frame,
         step=step if step is not None else 1
     )
-    
-    if block:
-        app.block_until_closed()
     
     return app

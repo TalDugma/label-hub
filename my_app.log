@@ -415,3 +415,112 @@
 2026-01-20 10:56:34.069 | INFO     | main:on_reset:227 - Reset all states.
 2026-01-20 10:56:34.070 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
 2026-01-20 10:56:34.071 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:31:14.754 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st10. Skipping extraction. Clear directory to re-extract.
+2026-01-20 18:31:15.058 | INFO     | core:init_sam_model:81 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 18:31:15.071 | INFO     | main:log:98 - Loaded 3 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st10
+2026-01-20 18:31:23.960 | INFO     | core:get_sam_features:187 - SAM features extracted.
+2026-01-20 18:31:30.318 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st10. Skipping extraction. Clear directory to re-extract.
+2026-01-20 18:31:30.547 | INFO     | core:init_sam_model:81 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 18:31:30.557 | INFO     | main:log:98 - Loaded 3 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st10
+2026-01-20 18:31:39.328 | INFO     | core:get_sam_features:187 - SAM features extracted.
+2026-01-20 18:31:51.312 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:31:51.326 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:31:55.173 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 18:31:55.182 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:31:55.781 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:31:55.788 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:31:56.221 | INFO     | core:set_input_image:148 - Setting frame 2 / 3
+2026-01-20 18:31:56.233 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:31:56.662 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:31:56.669 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:31:56.966 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 18:31:56.977 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:31:57.453 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:31:57.463 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:32:00.110 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 18:32:00.122 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:32:00.742 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:32:00.750 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:32:10.417 | INFO     | main:log:98 - Added point at 702, 168
+2026-01-20 18:32:25.125 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 18:32:25.133 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:32:25.137 | INFO     | main:log:98 - Reset all.
+2026-01-20 18:32:28.047 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:32:28.059 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:32:30.117 | INFO     | core:set_input_image:148 - Setting frame 2 / 3
+2026-01-20 18:32:30.127 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:32:30.854 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:32:30.863 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:33:28.540 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 18:33:28.549 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:33:29.551 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:33:29.556 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 3 points.
+2026-01-20 18:33:30.895 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 18:33:30.901 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:33:30.906 | INFO     | main:log:98 - Reset all.
+2026-01-20 18:33:31.668 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 18:33:31.675 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:33:31.679 | INFO     | main:log:98 - Reset all.
+2026-01-20 18:33:32.806 | INFO     | core:set_input_image:148 - Setting frame 2 / 3
+2026-01-20 18:33:32.817 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:33:33.350 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 18:33:33.359 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:33:35.124 | INFO     | main:log:98 - Points cleared.
+2026-01-20 18:33:46.768 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st1. Skipping extraction. Clear directory to re-extract.
+2026-01-20 18:33:47.019 | INFO     | core:init_sam_model:81 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 18:33:47.030 | INFO     | main:log:98 - Loaded 30 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st1
+2026-01-20 18:33:56.376 | INFO     | core:get_sam_features:187 - SAM features extracted.
+2026-01-20 18:33:58.831 | INFO     | core:set_input_image:148 - Setting frame 1 / 30
+2026-01-20 18:33:58.836 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:33:59.610 | INFO     | core:set_input_image:148 - Setting frame 0 / 30
+2026-01-20 18:33:59.618 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:01.135 | INFO     | core:set_input_image:148 - Setting frame 1 / 30
+2026-01-20 18:34:01.143 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:01.291 | INFO     | core:set_input_image:148 - Setting frame 2 / 30
+2026-01-20 18:34:01.298 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:01.433 | INFO     | core:set_input_image:148 - Setting frame 3 / 30
+2026-01-20 18:34:01.446 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:01.578 | INFO     | core:set_input_image:148 - Setting frame 4 / 30
+2026-01-20 18:34:01.588 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:01.693 | INFO     | core:set_input_image:148 - Setting frame 5 / 30
+2026-01-20 18:34:01.700 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:01.820 | INFO     | core:set_input_image:148 - Setting frame 6 / 30
+2026-01-20 18:34:01.825 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:02.143 | INFO     | core:set_input_image:148 - Setting frame 7 / 30
+2026-01-20 18:34:02.154 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:02.292 | INFO     | core:set_input_image:148 - Setting frame 8 / 30
+2026-01-20 18:34:02.302 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:11.590 | INFO     | main:log:98 - Added point at 691, 140
+2026-01-20 18:34:13.202 | INFO     | core:set_input_image:148 - Setting frame 9 / 30
+2026-01-20 18:34:13.209 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:13.401 | INFO     | core:set_input_image:148 - Setting frame 10 / 30
+2026-01-20 18:34:13.413 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:13.547 | INFO     | core:set_input_image:148 - Setting frame 11 / 30
+2026-01-20 18:34:13.554 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:13.819 | INFO     | core:set_input_image:148 - Setting frame 12 / 30
+2026-01-20 18:34:13.828 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:13.952 | INFO     | core:set_input_image:148 - Setting frame 13 / 30
+2026-01-20 18:34:13.958 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:14.073 | INFO     | core:set_input_image:148 - Setting frame 14 / 30
+2026-01-20 18:34:14.080 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:14.193 | INFO     | core:set_input_image:148 - Setting frame 15 / 30
+2026-01-20 18:34:14.199 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:14.328 | INFO     | core:set_input_image:148 - Setting frame 16 / 30
+2026-01-20 18:34:14.335 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 18:34:24.138 | INFO     | main:log:98 - Added point at 726, 124
+2026-01-20 18:34:26.327 | INFO     | main:log:98 - Running tracker...
+2026-01-20 18:34:26.328 | INFO     | core:run_tracker:262 - Loading images for visualization...
+2026-01-20 18:34:26.395 | INFO     | core:run_tracker:273 - Propagating masks in video...
+2026-01-20 18:34:26.395 | INFO     | core:run_tracker:275 - started propagation
+2026-01-20 18:35:12.778 | INFO     | core:run_tracker:277 - propagated frame 0
+2026-01-20 18:35:39.849 | INFO     | core:run_tracker:277 - propagated frame 1
+2026-01-20 18:36:09.658 | INFO     | core:run_tracker:277 - propagated frame 2
+2026-01-20 18:36:43.483 | INFO     | core:run_tracker:277 - propagated frame 3
+2026-01-20 18:37:19.378 | INFO     | core:run_tracker:277 - propagated frame 4
+2026-01-20 18:38:00.263 | INFO     | core:run_tracker:277 - propagated frame 5
+2026-01-20 18:38:43.987 | INFO     | core:run_tracker:277 - propagated frame 6
+2026-01-20 18:39:28.147 | INFO     | core:run_tracker:277 - propagated frame 7
+2026-01-20 18:39:28.148 | INFO     | core:run_tracker:277 - propagated frame 8
+2026-01-20 18:40:07.902 | INFO     | core:run_tracker:277 - propagated frame 9
+2026-01-20 18:40:47.520 | INFO     | core:run_tracker:277 - propagated frame 10
+2026-01-20 18:41:30.156 | INFO     | core:run_tracker:277 - propagated frame 11
