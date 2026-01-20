@@ -7,6 +7,160 @@ from tqdm import tqdm
 from loguru import logger as guru
 from sam2.build_sam import build_sam2_video_predictor
 from utils import isimage#, make_index_mask  # We need to implement make_index_mask in utils or keep it here.
+import torch.multiprocessing as mp
+import threading
+import queue # For the proxy queue
+
+# Worker loop function that runs in a separate process
+def sam2_worker_loop(input_queue, output_queue, checkpoint_dir, model_cfg, device):
+    try:
+        # Initialize model in the worker process
+        # Check for float32 settings inside the worker process where it matters
+        if "cuda" in device and torch.cuda.get_device_properties(0).major >= 8:
+            torch.backends.cuda.matmul.allow_tf32 = True
+            torch.backends.cudnn.allow_tf32 = True
+            
+        sam_model = build_sam2_video_predictor(model_cfg, checkpoint_dir, device=device)
+        guru.info(f"Worker: Model loaded on {device}")
+        
+        inference_state = None
+        
+        while True:
+            cmd, args = input_queue.get()
+            
+            if cmd == "EXIT":
+                break
+                
+            try:
+                if cmd == "INIT_VIDEO":
+                    video_path = args
+                    inference_state = sam_model.init_state(video_path=video_path)
+                    sam_model.reset_state(inference_state)
+                    output_queue.put(("SUCCESS", None))
+                    
+                elif cmd == "RESET":
+                    if inference_state:
+                         sam_model.reset_state(inference_state)
+                    output_queue.put(("SUCCESS", None))
+                    
+                elif cmd == "ADD_POINT":
+                    frame_idx, obj_id, points, labels = args
+                    if not inference_state:
+                        output_queue.put(("ERROR", "Inference state not initialized"))
+                        continue
+                        
+                    # Ensure we are in the correct autocast context
+                    if "cuda" in device:
+                        dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float32
+                        ctx = torch.autocast(device_type="cuda", dtype=dtype)
+                    else:
+                        ctx = torch.no_grad()
+
+                    with ctx:
+                        _, out_obj_ids, out_mask_logits = sam_model.add_new_points_or_box(
+                            inference_state=inference_state,
+                            frame_idx=frame_idx,
+                            obj_id=obj_id,
+                            points=points,
+                            labels=labels,
+                        )
+                        
+                        # Convert results to CPU numpy before sending back
+                        results = {
+                             out_obj_id: (out_mask_logits[i] > 0.0).squeeze().cpu().numpy()
+                             for i, out_obj_id in enumerate(out_obj_ids)
+                        }
+                        output_queue.put(("SUCCESS", results))
+                        
+                elif cmd == "PROPAGATE":
+                     start_frame_idx = args
+                     if not inference_state:
+                        output_queue.put(("ERROR", "Inference state not initialized"))
+                        continue
+                        
+                     if "cuda" in device:
+                        dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float32
+                        ctx = torch.autocast(device_type="cuda", dtype=dtype)
+                     else:
+                        ctx = torch.no_grad()
+
+                     with ctx:
+                        for out_frame_idx, out_obj_ids, out_mask_logits in sam_model.propagate_in_video(inference_state, start_frame_idx=start_frame_idx):
+                            masks = {
+                                out_obj_id: (out_mask_logits[i] > 0.0).squeeze().cpu().numpy()
+                                for i, out_obj_id in enumerate(out_obj_ids)
+                            }
+                            # Send intermediate result
+                            output_queue.put(("YIELD", (out_frame_idx, masks)))
+                        
+                        # Signal completion
+                        output_queue.put(("DONE", None))
+
+            except Exception as e:
+                guru.error(f"Worker Error during {cmd}: {e}")
+                import traceback
+                traceback.print_exc()
+                output_queue.put(("ERROR", str(e)))
+
+    except Exception as e:
+        guru.critical(f"Worker Process Crashed: {e}")
+        import traceback
+        traceback.print_exc()
+
+class SAM2Proxy:
+    def __init__(self, checkpoint_dir, model_cfg, device):
+        self.ctx = mp.get_context('spawn')
+        self.input_queue = self.ctx.Queue()
+        self.output_queue = self.ctx.Queue()
+        
+        self.process = self.ctx.Process(
+            target=sam2_worker_loop,
+            args=(self.input_queue, self.output_queue, checkpoint_dir, model_cfg, device)
+        )
+        self.process.start()
+        
+    def init_state(self, video_path):
+        self.input_queue.put(("INIT_VIDEO", video_path))
+        return self._wait_for_result()
+        
+    def reset_state(self, state_handle=None):
+        # state_handle is ignored as it lives in worker
+        self.input_queue.put(("RESET", None))
+        return self._wait_for_result()
+        
+    def add_new_points_or_box(self, inference_state, frame_idx, obj_id, points, labels):
+        # inference_state is ignored
+        self.input_queue.put(("ADD_POINT", (frame_idx, obj_id, points, labels)))
+        status, data = self._wait_for_result()
+        if status == "SUCCESS":
+            return data
+        return {}
+
+    def propagate_in_video(self, inference_state, start_frame_idx=0):
+        # This is a generator
+        self.input_queue.put(("PROPAGATE", start_frame_idx))
+        
+        while True:
+            # We use a longer timeout for propagation potentially, but blocking is fine
+            status, data = self._wait_for_result()
+            if status == "YIELD":
+                yield data # (out_frame_idx, masks)
+            elif status == "DONE":
+                break
+            elif status == "ERROR":
+                guru.error(f"Propagation error: {data}")
+                break
+    
+    def _wait_for_result(self):
+        # Retrieves from output_queue.
+        res = self.output_queue.get()
+        return res
+        
+    def close(self):
+        self.input_queue.put(("EXIT", None))
+        self.process.join(timeout=2)
+        if self.process.is_alive():
+            self.process.terminate()
 
 # Ideally make_index_mask should be in utils or a static method. 
 # Let's put it as a static method or helper here since it deals with mask logic.
@@ -70,15 +224,9 @@ class PromptGUI(object):
 
     def init_sam_model(self):
         if self.sam_model is None:
-            # Check for float32 settings
-            if "cuda" in self.device and torch.cuda.get_device_properties(0).major >= 8:
-                torch.backends.cuda.matmul.allow_tf32 = True
-                torch.backends.cudnn.allow_tf32 = True
-            
-            # Use bfloat16 for the entire notebook/session context generally, 
-            # but we will just ensure the model is built correctly.
-            self.sam_model = build_sam2_video_predictor(self.model_cfg, self.checkpoint_dir, device=self.device)
-            guru.info(f"loaded model checkpoint {self.checkpoint_dir} on {self.device}")
+            # We now use the proxy instead of building the model directly
+            self.sam_model = SAM2Proxy(self.checkpoint_dir, self.model_cfg, self.device)
+            guru.info(f"SAM2Worker process started via Proxy.")
 
     def clear_points(self):
         self.selected_points.clear()
@@ -182,9 +330,13 @@ class PromptGUI(object):
         return None
 
     def get_sam_features(self):
-        self.inference_state = self.sam_model.init_state(video_path=self.img_dir)
-        self.sam_model.reset_state(self.inference_state)
-        guru.info("SAM features extracted.")
+        # With proxy, init_state handles the Heavy lifting
+        # We pass self.img_dir which acts as the video path
+        self.sam_model.init_state(video_path=self.img_dir)
+        # self.inference_state is now just a placeholder flag in the main process
+        self.inference_state = True 
+        
+        guru.info("SAM features extracted (in worker).")
         return self.image
 
     def set_positive(self):
@@ -236,26 +388,18 @@ class PromptGUI(object):
     def get_sam_mask(self, frame_idx, input_points, input_labels):
         assert self.sam_model is not None
         
-        # Ensure we are in the correct autocast text
-        if "cuda" in self.device:
-            dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float32
-            ctx = torch.autocast(device_type="cuda", dtype=dtype)
-        else:
-            ctx = torch.no_grad()
+        # Proxy call directly returns the dictionary {obj_id: mask}
+        # input_points and input_labels are numpy arrays, which are pickleable.
+        
+        masks = self.sam_model.add_new_points_or_box(
+            inference_state=self.inference_state, # Placeholder
+            frame_idx=frame_idx,
+            obj_id=self.cur_mask_idx,
+            points=input_points,
+            labels=input_labels,
+        )
 
-        with ctx:
-             _, out_obj_ids, out_mask_logits = self.sam_model.add_new_points_or_box(
-                inference_state=self.inference_state,
-                frame_idx=frame_idx,
-                obj_id=self.cur_mask_idx,
-                points=input_points,
-                labels=input_labels,
-            )
-
-        return  {
-                out_obj_id: (out_mask_logits[i] > 0.0).squeeze().cpu().numpy()
-                for i, out_obj_id in enumerate(out_obj_ids)
-            }
+        return masks
 
     def run_tracker(self):
         # read images and drop the alpha channel
@@ -264,47 +408,25 @@ class PromptGUI(object):
         
         video_segments = {}  # video_segments contains the per-frame segmentation results
         
-        if "cuda" in self.device:
-            dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float32
-            ctx = torch.autocast(device_type="cuda", dtype=dtype)
-        else:
-            ctx = torch.no_grad()
+        guru.info("Propagating masks in video... (Worker)")
+        
+        # No context needed here, handled in worker
+        guru.info("started propagation")
+        
+        # Proxy.propagate_in_video yields (out_frame_idx, masks_dict)
+        for out_frame_idx, masks in self.sam_model.propagate_in_video(self.inference_state, start_frame_idx=0):
+            # guru.info(f"propagated frame {out_frame_idx}") # Reduce spam if needed
+            video_segments[out_frame_idx] = masks
 
-        guru.info("Propagating masks in video...")
-        with ctx:
-            guru.info("started propagation")
-            for out_frame_idx, out_obj_ids, out_mask_logits in self.sam_model.propagate_in_video(self.inference_state, start_frame_idx=0):
-                guru.info(f"propagated frame {out_frame_idx}")
-                masks = {
-                    out_obj_id: (out_mask_logits[i] > 0.0).squeeze().cpu().numpy()
-                    for i, out_obj_id in enumerate(out_obj_ids)
-                }
-                video_segments[out_frame_idx] = masks
-
-                # Update per_frame_masks for visualization
-                if out_frame_idx not in self.per_frame_masks:
-                    self.per_frame_masks[out_frame_idx] = {}
-                
-                # 'masks' is {obj_id: logical_mask}
-                # We need to convert logical_mask to standard mask format used in this app (usually uint8 with values)
-                # But actually, per_frame_masks[frame][id] expects a mask where that specific object is labeled. 
-                # make_index_mask converts {id: mask} -> single index mask.
-                # Here we want to store the mask for *each* object ID individually for our isolation logic.
-                
-                for obj_id, logical_mask in masks.items():
-                    # Create a mask where this object is labeled with its ID (or just 1? isolation logic uses initialized zeros and sets obj_id)
-                    # isolation logic in make_index_mask expects a dict of masks.
-                    # let's look at how add_point saves it: it saves the result of make_index_mask(filtered).
-                    # So we should save an index mask where pixels == obj_id (or 1 if we normalize).
-                    # Our make_index_mask sets pixels to `i+1` where `i` is the key. 
-                    # But the key coming from SAM is the arbitrary obj_id.
-                    # If we follow add_point, it saves `make_index_mask({obj_id: logical})`.
-                    
-                    single_obj_dict = {obj_id: logical_mask}
-                    # We reuse make_index_mask to format it correctly as a uint8 array
-                    formatted_mask = make_index_mask(single_obj_dict)
-                    if formatted_mask is not None:
-                        self.per_frame_masks[out_frame_idx][obj_id] = formatted_mask
+            # Update per_frame_masks for visualization
+            if out_frame_idx not in self.per_frame_masks:
+                self.per_frame_masks[out_frame_idx] = {}
+            
+            for obj_id, logical_mask in masks.items():
+                single_obj_dict = {obj_id: logical_mask}
+                formatted_mask = make_index_mask(single_obj_dict)
+                if formatted_mask is not None:
+                    self.per_frame_masks[out_frame_idx][obj_id] = formatted_mask
 
         self.index_masks_all = []
         # Ensure frames are ordered

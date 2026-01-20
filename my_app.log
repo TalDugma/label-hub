@@ -415,3 +415,176 @@
 2026-01-20 10:56:34.069 | INFO     | main:on_reset:227 - Reset all states.
 2026-01-20 10:56:34.070 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
 2026-01-20 10:56:34.071 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:44:58.925 | INFO     | main:run_app:317 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st10...
+2026-01-20 15:44:58.926 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st10. Skipping extraction. Clear directory to re-extract.
+2026-01-20 15:44:59.192 | INFO     | core:init_sam_model:81 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 15:44:59.233 | INFO     | main:load_sequence:120 - Loaded 3 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st10
+2026-01-20 15:45:08.015 | INFO     | core:get_sam_features:187 - SAM features extracted.
+2026-01-20 15:45:08.016 | INFO     | main:block_until_closed:257 - Launching GUI with backend: widget...
+2026-01-20 15:45:08.103 | INFO     | main:block_until_closed:262 - GUI closed.
+2026-01-20 15:45:18.520 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 15:45:18.525 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:45:21.340 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 15:45:21.342 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:45:23.753 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 15:45:23.757 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:45:34.560 | INFO     | main:on_click:181 - Added point at 682, 177 frame 1
+2026-01-20 15:45:55.265 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 15:45:55.268 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:45:56.164 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 15:45:56.168 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 15:45:57.244 | INFO     | core:set_input_image:148 - Setting frame 2 / 3
+2026-01-20 15:45:57.248 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:45:58.175 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 15:45:58.178 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 15:45:58.688 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 15:45:58.690 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:45:59.147 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 15:45:59.151 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 15:45:59.620 | INFO     | core:set_input_image:148 - Setting frame 2 / 3
+2026-01-20 15:45:59.623 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:46:01.581 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 15:46:01.588 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 15:46:02.633 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 15:46:02.637 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 15:46:03.142 | INFO     | core:set_input_image:148 - Setting frame 1 / 3
+2026-01-20 15:46:03.147 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 16:31:59.376 | INFO     | core:set_input_image:148 - Setting frame 0 / 3
+2026-01-20 16:31:59.381 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 16:32:06.205 | INFO     | main:run_app:317 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st5...
+2026-01-20 16:32:06.206 | INFO     | utils:extract_video_frames:99 - Extracting frames from /Users/taldugma/Downloads/B7.mp4 to /Users/taldugma/Downloads/B7_frames_s0_e30_st5...
+2026-01-20 16:32:06.208 | INFO     | utils:extract_video_frames:121 - Extraction config: Start=0, End=30, Step=5, SrcFPS=30.00
+2026-01-20 16:32:06.269 | INFO     | utils:extract_video_frames:157 - Extracted 6 frames.
+2026-01-20 16:32:06.546 | INFO     | core:init_sam_model:81 - loaded model checkpoint /Users/taldugma/sam2/checkpoints/sam2.1_hiera_tiny.pt on cpu
+2026-01-20 16:32:06.574 | INFO     | main:load_sequence:120 - Loaded 6 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st5
+2026-01-20 16:32:15.337 | INFO     | core:get_sam_features:187 - SAM features extracted.
+2026-01-20 16:32:15.338 | INFO     | main:block_until_closed:257 - Launching GUI with backend: widget...
+2026-01-20 16:32:15.371 | INFO     | main:block_until_closed:262 - GUI closed.
+2026-01-20 16:32:21.579 | INFO     | core:set_input_image:148 - Setting frame 1 / 6
+2026-01-20 16:32:21.583 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 16:32:22.967 | INFO     | core:set_input_image:148 - Setting frame 0 / 6
+2026-01-20 16:32:22.970 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 16:32:24.330 | INFO     | core:set_input_image:148 - Setting frame 1 / 6
+2026-01-20 16:32:24.338 | INFO     | core:set_mask_id:107 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 16:32:29.568 | INFO     | main:on_label_type_change:216 - Switched to Negative Labels
+2026-01-20 16:32:30.363 | INFO     | main:on_label_type_change:213 - Switched to Positive Labels
+2026-01-20 17:14:30.742 | INFO     | main:run_app:317 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st5...
+2026-01-20 17:14:30.742 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st5. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:14:30.759 | INFO     | core:init_sam_model:229 - SAM2Worker process started via Proxy.
+2026-01-20 17:14:30.797 | INFO     | main:load_sequence:120 - Loaded 6 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st5
+2026-01-20 17:14:32.809 | INFO     | core:get_sam_features:339 - SAM features extracted (in worker).
+2026-01-20 17:14:32.812 | INFO     | main:block_until_closed:257 - Launching GUI with backend: widget...
+2026-01-20 17:14:32.847 | INFO     | main:block_until_closed:262 - GUI closed.
+2026-01-20 17:14:35.285 | INFO     | core:set_input_image:296 - Setting frame 1 / 6
+2026-01-20 17:14:35.289 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:36.058 | INFO     | core:set_input_image:296 - Setting frame 2 / 6
+2026-01-20 17:14:36.063 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:37.065 | INFO     | core:set_input_image:296 - Setting frame 3 / 6
+2026-01-20 17:14:37.069 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:37.871 | INFO     | core:set_input_image:296 - Setting frame 4 / 6
+2026-01-20 17:14:37.875 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:38.888 | INFO     | core:set_input_image:296 - Setting frame 0 / 6
+2026-01-20 17:14:38.893 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:39.775 | INFO     | core:set_input_image:296 - Setting frame 1 / 6
+2026-01-20 17:14:39.779 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:41.833 | INFO     | main:on_click:181 - Added point at 166, 240 frame 1
+2026-01-20 17:14:43.216 | INFO     | core:set_input_image:296 - Setting frame 2 / 6
+2026-01-20 17:14:43.219 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:44.321 | INFO     | core:set_input_image:296 - Setting frame 4 / 6
+2026-01-20 17:14:44.325 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:45.408 | INFO     | core:set_input_image:296 - Setting frame 5 / 6
+2026-01-20 17:14:45.413 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:46.262 | INFO     | core:set_input_image:296 - Setting frame 3 / 6
+2026-01-20 17:14:46.267 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:48.159 | INFO     | core:set_input_image:296 - Setting frame 2 / 6
+2026-01-20 17:14:48.164 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:48.884 | INFO     | core:set_input_image:296 - Setting frame 1 / 6
+2026-01-20 17:14:48.888 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 17:14:51.796 | INFO     | core:set_input_image:296 - Setting frame 2 / 6
+2026-01-20 17:14:51.801 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:52.248 | INFO     | core:set_input_image:296 - Setting frame 3 / 6
+2026-01-20 17:14:52.250 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:53.054 | INFO     | core:set_input_image:296 - Setting frame 2 / 6
+2026-01-20 17:14:53.057 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:14:54.032 | INFO     | core:set_input_image:296 - Setting frame 1 / 6
+2026-01-20 17:14:54.038 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 1 points.
+2026-01-20 17:14:54.460 | INFO     | core:set_input_image:296 - Setting frame 2 / 6
+2026-01-20 17:14:54.463 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:15:21.293 | INFO     | main:run_app:317 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st10...
+2026-01-20 17:15:21.293 | INFO     | utils:extract_video_frames:96 - Frames already exist in /Users/taldugma/Downloads/B7_frames_s0_e30_st10. Skipping extraction. Clear directory to re-extract.
+2026-01-20 17:15:21.305 | INFO     | core:init_sam_model:229 - SAM2Worker process started via Proxy.
+2026-01-20 17:15:21.345 | INFO     | main:load_sequence:120 - Loaded 3 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st10
+2026-01-20 17:15:23.240 | INFO     | core:get_sam_features:339 - SAM features extracted (in worker).
+2026-01-20 17:15:32.473 | INFO     | main:run_app:317 - Preparing frames in /Users/taldugma/Downloads/B7_frames_s0_e30_st1...
+2026-01-20 17:15:32.474 | INFO     | utils:extract_video_frames:99 - Extracting frames from /Users/taldugma/Downloads/B7.mp4 to /Users/taldugma/Downloads/B7_frames_s0_e30_st1...
+2026-01-20 17:15:32.476 | INFO     | utils:extract_video_frames:121 - Extraction config: Start=0, End=30, Step=1, SrcFPS=30.00
+2026-01-20 17:15:32.609 | INFO     | utils:extract_video_frames:157 - Extracted 30 frames.
+2026-01-20 17:15:32.618 | INFO     | core:init_sam_model:229 - SAM2Worker process started via Proxy.
+2026-01-20 17:15:32.657 | INFO     | main:load_sequence:120 - Loaded 30 images from /Users/taldugma/Downloads/B7_frames_s0_e30_st1
+2026-01-20 17:15:34.706 | INFO     | core:get_sam_features:339 - SAM features extracted (in worker).
+2026-01-20 17:15:41.422 | INFO     | core:set_input_image:296 - Setting frame 8 / 30
+2026-01-20 17:15:41.427 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:15:42.196 | INFO     | core:set_input_image:296 - Setting frame 11 / 30
+2026-01-20 17:15:42.200 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:15:42.850 | INFO     | core:set_input_image:296 - Setting frame 15 / 30
+2026-01-20 17:15:42.853 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:15:43.403 | INFO     | core:set_input_image:296 - Setting frame 18 / 30
+2026-01-20 17:15:43.407 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:15:47.098 | INFO     | main:on_click:181 - Added point at 688, 162 frame 18
+2026-01-20 17:15:48.657 | INFO     | main:on_label_type_change:216 - Switched to Negative Labels
+2026-01-20 17:15:49.694 | INFO     | main:on_click:181 - Added point at 871, 7 frame 18
+2026-01-20 17:15:51.810 | INFO     | core:set_mask_id:255 - Switched to Mask ID -1. Loaded 0 points.
+2026-01-20 17:15:52.528 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 2 points.
+2026-01-20 17:15:52.856 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:15:54.981 | INFO     | main:on_label_type_change:213 - Switched to Positive Labels
+2026-01-20 17:15:55.996 | INFO     | main:on_click:181 - Added point at 330, 337 frame 18
+2026-01-20 17:15:59.164 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 2 points.
+2026-01-20 17:15:59.718 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 1 points.
+2026-01-20 17:16:01.228 | INFO     | main:on_submit:235 - Running tracker... this might take a moment.
+2026-01-20 17:16:01.229 | INFO     | core:run_tracker:406 - Loading images for visualization...
+2026-01-20 17:16:01.307 | INFO     | core:run_tracker:411 - Propagating masks in video... (Worker)
+2026-01-20 17:16:01.307 | INFO     | core:run_tracker:414 - started propagation
+2026-01-20 17:16:02.165 | ERROR    | core:propagate_in_video:151 - Propagation error: mat1 and mat2 must have the same dtype, but got BFloat16 and Float
+2026-01-20 17:16:02.165 | INFO     | core:run_tracker:433 - Processing results...
+2026-01-20 17:16:02.166 | INFO     | main:on_submit:237 - Tracking complete. Results loaded into view.
+2026-01-20 17:16:05.125 | INFO     | core:set_input_image:296 - Setting frame 10 / 30
+2026-01-20 17:16:05.130 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:06.217 | INFO     | core:set_input_image:296 - Setting frame 5 / 30
+2026-01-20 17:16:06.222 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:08.581 | INFO     | core:set_input_image:296 - Setting frame 19 / 30
+2026-01-20 17:16:08.586 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:09.208 | INFO     | core:set_input_image:296 - Setting frame 22 / 30
+2026-01-20 17:16:09.213 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:09.978 | INFO     | core:set_input_image:296 - Setting frame 25 / 30
+2026-01-20 17:16:09.982 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:10.930 | INFO     | core:set_input_image:296 - Setting frame 27 / 30
+2026-01-20 17:16:10.936 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:12.584 | INFO     | core:set_input_image:296 - Setting frame 20 / 30
+2026-01-20 17:16:12.590 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:13.951 | INFO     | core:set_input_image:296 - Setting frame 21 / 30
+2026-01-20 17:16:13.957 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:14.645 | INFO     | core:set_input_image:296 - Setting frame 19 / 30
+2026-01-20 17:16:14.648 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:15.246 | INFO     | core:set_input_image:296 - Setting frame 17 / 30
+2026-01-20 17:16:15.251 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:15.929 | INFO     | core:set_input_image:296 - Setting frame 20 / 30
+2026-01-20 17:16:15.933 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:16.394 | INFO     | core:set_input_image:296 - Setting frame 23 / 30
+2026-01-20 17:16:16.396 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:17.054 | INFO     | core:set_input_image:296 - Setting frame 24 / 30
+2026-01-20 17:16:17.060 | INFO     | core:set_mask_id:255 - Switched to Mask ID 1. Loaded 0 points.
+2026-01-20 17:16:19.543 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:16:21.193 | INFO     | core:set_input_image:296 - Setting frame 19 / 30
+2026-01-20 17:16:21.198 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:16:21.857 | INFO     | core:set_input_image:296 - Setting frame 17 / 30
+2026-01-20 17:16:21.859 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:16:22.453 | INFO     | core:set_input_image:296 - Setting frame 21 / 30
+2026-01-20 17:16:22.457 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:16:22.944 | INFO     | core:set_input_image:296 - Setting frame 25 / 30
+2026-01-20 17:16:22.947 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:16:23.377 | INFO     | core:set_input_image:296 - Setting frame 27 / 30
+2026-01-20 17:16:23.380 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:16:24.408 | INFO     | core:set_input_image:296 - Setting frame 28 / 30
+2026-01-20 17:16:24.413 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.
+2026-01-20 17:16:25.346 | INFO     | core:set_input_image:296 - Setting frame 29 / 30
+2026-01-20 17:16:25.352 | INFO     | core:set_mask_id:255 - Switched to Mask ID 0. Loaded 0 points.

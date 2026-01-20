@@ -1,4 +1,5 @@
 import os
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, RadioButtons
 import numpy as np
@@ -248,38 +249,20 @@ class MatplotlibGUI:
     def block_until_closed(self):
         """
         Blocks the execution until the figure is closed.
-        Uses explicit draw and start_event_loop to ensure visibility and responsiveness.
+        Uses standard plt.show(block=True) for best stability.
         """
         if not self.fig:
              return
              
-        guru.info("Launching GUI... (Cell active)")
-        plt.show(block=False)
-        
-        # Force an initial draw and flush to ensure window is not blank
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
+        guru.info(f"Launching GUI with backend: {matplotlib.get_backend()}...")
         
         try:
-            while plt.fignum_exists(self.fig.number):
-                # Run the backend's event loop for a short slice
-                # This should handle painting and inputs correctly without re-showing (infinite windows)
-                self.fig.canvas.start_event_loop(0.1)
+            # block=True is the robust standard way to run the loop
+            plt.show(block=True)
+            guru.info("GUI closed.")
         except KeyboardInterrupt:
             guru.info("Execution stopped by user.")
             plt.close(self.fig)
-        except Exception as e:
-            # Fallback for backends that might not support start_event_loop well
-            guru.warning(f"Warning: {e}. Falling back to sleep loop.")
-            import time
-            while plt.fignum_exists(self.fig.number):
-                try:
-                    self.fig.canvas.flush_events()
-                except:
-                    pass
-                time.sleep(0.1)
-            
-        guru.info("GUI closed.")
 
 def run_app(
     video_path, 
